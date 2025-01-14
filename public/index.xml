@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Home on rafaelbroseghini.com</title>
+    <link>https://rafaelbroseghini.com/</link>
+    <description>Recent content in Home on rafaelbroseghini.com</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 12 Nov 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://rafaelbroseghini.com/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>to be a first post</title>
+      <link>https://rafaelbroseghini.com/posts/post/</link>
+      <pubDate>Sun, 12 Nov 2023 00:00:00 +0000</pubDate>
+      <guid>https://rafaelbroseghini.com/posts/post/</guid>
+      <description>to be a first post</description>
+    </item>
+    <item>
+      <title></title>
+      <link>https://rafaelbroseghini.com/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://rafaelbroseghini.com/about/</guid>
+      <description>&lt;h1 class=&#34;heading&#34; id=&#34;whoami&#34;&gt;&#xA;  whoami&#xA;  &lt;a href=&#34;#whoami&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h1&gt;&#xA;&lt;p&gt;I am a Platform Engineer at Trimble,Inc working with Azure, ArgoCD, Kubernetes, Docker, Terraform, Python, Go, etc.&lt;/p&gt;&#xA;&lt;p&gt;I specialize in building developer platforms that accelerate software delivery by abstracting infrastructure and operational complexities. My current focus is designing and implementing a self-service platform that reduces deployment time from days/hours to minutes while maintaining security and compliance standards.&lt;/p&gt;&#xA;&lt;p&gt;With deep experience in Software Development, Infrastructure as Code, and GitOps practices, I efficiently bridge the gap between development and operations through automation and platform engineering best practices.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
