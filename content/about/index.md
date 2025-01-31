@@ -1,7 +1,7 @@
 # whoami
 
-I am a Platform Engineer at Trimble,Inc working with Azure, ArgoCD, Kubernetes, Docker, Terraform, Python, Go, etc.
+I am a Platform Engineer at [Trimble,Inc](https://www.trimble.com/en) specializing in cloud-native technologies including Azure, Kubernetes, ArgoCD, Docker, Terraform, GitHub Actions, Go, and Python.
 
-I specialize in building developer platforms that accelerate software delivery by abstracting infrastructure and operational complexities. My current focus is designing and implementing a self-service platform that reduces deployment time from days/hours to minutes while maintaining security and compliance standards.
+My focus is architecting, building and maintaining internal developer platforms that streamline the software delivery lifecycle. I specialize in self-service solutions that reduce deployment cycles by abstracting operational complexity while ensuring enterprise-grade security and compliance standards.
 
-With deep experience in Software Development, Infrastructure as Code, and GitOps practices, I efficiently bridge the gap between development and operations through automation and platform engineering best practices.
+I am a huge [football](https://en.wikipedia.org/wiki/Football) fan and travel enthusiast. I enjoy biking, reading and have recently started to get into home automation.
