@@ -28,6 +28,12 @@ breadcrumbs = true
 
 showFooter = false
 
+faviconPath = 'favicon'
+
+[params.umami]
+enable = true
+websiteId = "9b9456bb-75e9-43da-9e93-44d014bd324f"
+jsLocation = "https://cloud.umami.is/script.js"
 # Social icons
 [[params.social]]
 name = "linkedin"
