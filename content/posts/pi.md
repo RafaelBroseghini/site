@@ -18,7 +18,7 @@ Over the past few weeks I have been playing around with my RaspberryPi 5 to host
 
 It's been going pretty well, but I wanted to minimize the amount of manual intervention needed from me to deploy and debug services running in my `k3s` cluster. Since I have had experience with ArgoCD, I knew it was a good tool for the job!
 
-I wanted to get that up and running on my Raspberry Pi and be able to access it from my home network or anywhere in the world (thanks to [Tailscale](https://tailscale.com)! - more on it on another post).
+The ultimate goal is to get the cluster up and running on my Raspberry Pi and be able to **securely** access it not only from my home network but also **anywhere in the world** (thanks to [Tailscale](https://tailscale.com)! - more on it on another post).
 
 ![pi](../../img/raspi.jpeg#small "One Node Home Server - Raspberry Pi 5")
 
@@ -28,9 +28,9 @@ I wanted to get that up and running on my Raspberry Pi and be able to access it 
 
 My Raspberry Pi kubernetes cluster runs on a k3s distribution, which is packaged as a single <70MB binary. Perfect for my use case!
 
-[Following the docs](https://docs.k3s.io/quick-start#install-script), to get a `k3s` cluster up and running on your 1 node RaspberryPi cluster all you need to do is run:
+[Following the docs](https://docs.k3s.io/quick-start#install-script), to get a `k3s` cluster up and running on my 1 node RaspberryPi cluster all I need to do is run:
 
-1. Append `cgroup_memory=1 cgroup_enable=memory` to the end of `/boot/firmware/cmdline.txt`
+Add `cgroup_memory=1 cgroup_enable=memory` to the end of `/boot/firmware/cmdline.txt`
 
 ```bash
 sudo reboot
@@ -42,7 +42,7 @@ curl -sfL https://get.k3s.io | sh -
 
 ## ArgoCD
 
-From the ArgoCD docs: `Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes.` It's a pretty amazing project and I encourage [you to head over to the docs](https://argo-cd.readthedocs.io/en/stable/) to learn more!
+`Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes.` It's an amazing project with a large active community! I encourage [you to head over to the docs](https://argo-cd.readthedocs.io/en/stable/) to learn more if you're interested!
 
 ### How I bootstrap ArgoCD
 
@@ -55,7 +55,7 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/<V
 
 This installs a non-HA version of Argo, which is ok for my homelab setup.
 
-Once I get Argo running in the cluster and the pods come up and healthy, I log into the UI with the initial admin login and make sure it's responding:
+Once I get Argo running in the cluster and the pods come up and healthy, I log into the UI with the initial admin login and make sure it's properly responding:
 
 ```bash
 argocd login --core
@@ -65,15 +65,15 @@ argocd admin dashboard # username: admin / password copied from above
 
 ### Managing Applications
 
-In short, ArgoCD reacts to changes in version control systems and applies changes to Kubernetes objects in cluster. 
+In short, ArgoCD reacts to changes in version control systems and applies changes to Kubernetes objects in cluster(s). 
 
-There are a variety of ways that you can structure repositories to manage applications. For the purpose of this guide we will have of repository called `lab` that will both host the ArgoCD applications and the configuration of those apps. 
+There are a variety of ways that you can structure repositories to manage applications. For the purpose of this guide we will have of repository called `homelab` that will both host the ArgoCD applications and the configuration of those apps. 
 
 I encourage you to read [this post](https://codefresh.io/blog/how-to-structure-your-argo-cd-repositories-using-application-sets/) by Kostis Kapelonis on different ways to structure your Git repos.
 
 #### App-of-Apps Pattern
 
-In order for us to **avoid** having to `kubectl apply -f` each application individually, we will leverage the [app-of-apps](https://argo-cd.readthedocs.io/en/latest/operator-manual/cluster-bootstrapping/#app-of-apps-pattern) pattern through a `root` application.
+In order for us to **avoid** having to `kubectl apply -f` each application individually, we will leverage the [app-of-apps](https://argo-cd.readthedocs.io/en/latest/operator-manual/cluster-bootstrapping/#app-of-apps-pattern) pattern through a `root` application. One of the main goals was to manually intervene as little as possible!
 
 The application YAML will point to the `k8s/apps` folder which will apply all applications in the cluster for us auto magically.
 
