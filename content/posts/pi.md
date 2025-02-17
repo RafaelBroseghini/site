@@ -30,9 +30,14 @@ My Raspberry Pi kubernetes cluster runs on a k3s distribution, which is packaged
 
 [Following the docs](https://docs.k3s.io/quick-start#install-script), to get a `k3s` cluster up and running on your 1 node RaspberryPi cluster all you need to do is run:
 
+1. Append `cgroup_memory=1 cgroup_enable=memory` to the end of `/boot/firmware/cmdline.txt`
+
+```bash
+sudo reboot
+```
+
 ```bash
 curl -sfL https://get.k3s.io | sh -
-sudo echo "cgroup_memory=1 cgroup_enable=memory" >> /boot/firmware/cmdline.txt
 ```
 
 ## ArgoCD
