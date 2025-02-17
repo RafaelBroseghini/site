@@ -18,7 +18,7 @@
 
 <title>
     
-    RaspberryPi Homelab - Part 1 | rafaelbroseghini.com
+    RaspberryPi Homelab - Part 1 - ArgoCD | rafaelbroseghini.com
     
 </title>
 
@@ -26,8 +26,8 @@
 
 <meta property="og:url" content="https://rafaelbroseghini.com/posts/pi/">
   <meta property="og:site_name" content="rafaelbroseghini.com">
-  <meta property="og:title" content="RaspberryPi Homelab - Part 1">
-  <meta property="og:description" content="getting started on my homelab">
+  <meta property="og:title" content="RaspberryPi Homelab - Part 1 - ArgoCD">
+  <meta property="og:description" content="managing continuous delivery with ArgoCD &amp; k3s">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
@@ -144,7 +144,7 @@
     <a href="/posts/">Posts</a>
     <span class="breadcrumbs-separator"> > </span>
     
-    <a class="breadcrumbs-current" href="/posts/pi/">RaspberryPi Homelab - Part 1</a>
+    <a class="breadcrumbs-current" href="/posts/pi/">RaspberryPi Homelab - Part 1 - ArgoCD</a>
 </div>
 
 
@@ -155,9 +155,9 @@
 
     
 
-    <h1 class="single-title">RaspberryPi Homelab - Part 1</h1>
+    <h1 class="single-title">RaspberryPi Homelab - Part 1 - ArgoCD</h1>
     
-    <p class="single-summary">getting started on my homelab</p>
+    <p class="single-summary">managing continuous delivery with ArgoCD &amp; k3s</p>
     
 
     
@@ -322,9 +322,13 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#ca9ee6">path</span>: k8s/argocd/config/argocd/base <span style="color:#737994;font-style:italic"># kustomization base folder</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#ca9ee6">repoURL</span>: https://github.com/rafaelbroseghini/homelab.git
 </span></span><span style="display:flex;"><span>    <span style="color:#ca9ee6">targetRevision</span>: HEAD
+</span></span><span style="display:flex;"><span>  <span style="color:#ca9ee6">syncPolicy</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ca9ee6">automated</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ca9ee6">prune</span>: <span style="color:#ef9f76">true</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ca9ee6">selfHeal</span>: <span style="color:#ef9f76">true</span>
 </span></span></code></pre></div><p>You can see how this process would repeat for all applications that you wish to deploy in your cluster.</p>
 <p>We would add the <code>Application</code> yaml under the correct path in the <code>apps</code> folder and the <code>root</code> application will take care of <a href="https://argo-cd.readthedocs.io/en/stable/user-guide/auto_sync/">auto syncing</a> it for us!</p>
-<p>Now head over to the ArgoCD UI, and hard refresh your <code>root</code> application. You should see the <code>argocd</code> application show up with a diff that you can inspect and see what changes it will apply in the cluster.</p>
+<p>Now head over to the ArgoCD UI <code>/argocd</code> path, and hard refresh your <code>root</code> application. You should see the <code>argocd</code> application show up and auto sync.</p>
 
     
   </div>
