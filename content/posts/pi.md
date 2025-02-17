@@ -136,7 +136,7 @@ We would add the `Application` yaml under the correct path in the `apps` folder 
 
 Now head over to the ArgoCD UI `/argocd` path, and hard refresh your `root` application. You should see the `argocd` application show up and auto sync.
 
-![argocd](../../img/argo.png#small "ArgoCD managing ArgoCD :-)")
+![argocd](../../img/argo.png "ArgoCD managing ArgoCD :-)")
 
 Using the structure at [homelab/k8s](https://github.com/rafaelbroseghini/homelab/k8s) allows me to manage a lightweight k3s cluster in my Raspberry Pi 5 with almost no manual intervention needed! 
 
