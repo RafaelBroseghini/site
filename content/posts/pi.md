@@ -12,6 +12,8 @@ hideBackToTop = false
 
 # Introduction
 
+> You can find all of the manifests for my k8s setup at my [homelab](https://github.com/rafaelbroseghini/homelab) GitHub repository.
+
 Over the past few weeks I have been playing around with my RaspberryPi 5 to host a Kubernetes cluster, a Certificate Authority using `step-ca`, some microservices and to learn physical computing.
 
 It's been going pretty well, but I wanted to minimize the amount of manual intervention needed from me to deploy and debug services running in my `k3s` cluster. Since I have had experience with ArgoCD, I knew it was a good tool for the job!
@@ -66,9 +68,9 @@ I encourage you to read [this post](https://codefresh.io/blog/how-to-structure-y
 
 #### App-of-Apps Pattern
 
-In order for us to avoid having to `kubectl apply` each application individually, we will leverage the [app-of-apps](https://argo-cd.readthedocs.io/en/latest/operator-manual/cluster-bootstrapping/#app-of-apps-pattern) pattern through a `root` application. 
+In order for us to **avoid** having to `kubectl apply -f` each application individually, we will leverage the [app-of-apps](https://argo-cd.readthedocs.io/en/latest/operator-manual/cluster-bootstrapping/#app-of-apps-pattern) pattern through a `root` application.
 
-The application YAML will point to the `k8s/argocd/apps` folder which will apply all applications in the cluster for us auto magically.
+The application YAML will point to the `k8s/apps` folder which will apply all applications in the cluster for us auto magically.
 
 ##### Root Application
 
@@ -79,14 +81,14 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io
   name: root
-  namespace: argocd # ArgoCD Application namespace
+  namespace: argocd
 spec:
   destination:
-    namespace: argocd # Underlying application manifests namespace from 'k8s/argocd/apps' path
+    namespace: argocd
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: k8s/argocd/apps
+    path: k8s/apps
     repoURL: https://github.com/rafaelbroseghini/homelab.git
     targetRevision: HEAD
   syncPolicy:
@@ -98,7 +100,7 @@ spec:
 We need to manually bootstrap the root application once and only once:
 
 ```bash
-kubectl apply -f k8s/argocd/root.yaml
+kubectl apply -f k8s/root.yaml
 ```
 
 ##### Managing Applications
@@ -115,11 +117,11 @@ metadata:
   namespace: argocd
 spec:
   destination:
-    namespace: argocd # Underlying application manifests from 'k8s/apps/argocd/base' path
+    namespace: argocd
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: k8s/argocd/config/argocd/base # kustomization base folder
+    path: k8s/config/argocd/base
     repoURL: https://github.com/rafaelbroseghini/homelab.git
     targetRevision: HEAD
   syncPolicy:
@@ -128,12 +130,14 @@ spec:
       selfHeal: true
 ```
 
-You can see how this process would repeat for all applications that you wish to deploy in your cluster. 
+I hope you can see how this process would repeat for any application(s) that you wish to deploy in your cluster. 
 
 We would add the `Application` yaml under the correct path in the `apps` folder and the `root` application will take care of [auto syncing](https://argo-cd.readthedocs.io/en/stable/user-guide/auto_sync/) it for us!
 
 Now head over to the ArgoCD UI `/argocd` path, and hard refresh your `root` application. You should see the `argocd` application show up and auto sync.
 
-### Conclusion
+![argocd](../../img/argo.png#small "ArgoCD managing ArgoCD :-)")
 
-Using the structure at [github.com/rafaelbroseghini/homelab/argocd](https://github.com/rafaelbroseghini/homelab/argocd) allows me to manage a lightweight k8s cluster in my Raspberry Pi 5. Feel free to clone/fork the repo and suggest any changes!
+Using the structure at [homelab/k8s](https://github.com/rafaelbroseghini/homelab/k8s) allows me to manage a lightweight k3s cluster in my Raspberry Pi 5 with almost no manual intervention needed! 
+
+Feel free to clone/fork the repo and suggest any changes! :)
