@@ -1,0 +1,135 @@
++++
+title = "RaspberryPi Homelab - Part 1 - ArgoCD"
+date = "2025-02-16"
+summary = "managing continuous delivery with ArgoCD & k3s"
+readTime = true
+math = true
+tags = ["homelab"]
+showTags = true
+hideBackToTop = false
++++
+
+
+# Introduction
+
+Over the past few weeks I have been playing around with my RaspberryPi 5 to host a Kubernetes cluster, a Certificate Authority using `step-ca`, some microservices and to learn physical computing.
+
+It's been going pretty well, but I wanted to minimize the amount of manual intervention needed from me to deploy and debug services running in my `k3s` cluster. Since I have had experience with ArgoCD, I knew it was a good tool for the job!
+
+I wanted to get that up and running on my Raspberry Pi and be able to access it from my home network or anywhere in the world (thanks to [Tailscale](https://tailscale.com)! - more on it on another post).
+
+![pi](../../img/raspi.jpeg#small "One Node Home Server - Raspberry Pi 5")
+
+---
+
+## K3s
+
+My Raspberry Pi kubernetes cluster runs on a k3s distribution, which is packaged as a single <70MB binary. Perfect for my use case!
+
+[Following the docs](https://docs.k3s.io/quick-start#install-script), to get a `k3s` cluster up and running on your 1 node RaspberryPi cluster all you need to do is run:
+
+```bash
+curl -sfL https://get.k3s.io | sh -
+sudo echo "cgroup_memory=1 cgroup_enable=memory" >> /boot/firmware/cmdline.txt
+```
+
+## ArgoCD
+
+From the ArgoCD docs: `Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes.` It's a pretty amazing project and I encourage [you to head over to the docs](https://argo-cd.readthedocs.io/en/stable/) to learn more!
+
+### How I bootstrap ArgoCD
+
+I personally pick the version of ArgoCD I want to deploy on my cluster and run:
+
+```bash
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/<VERSION>/manifests/install.yaml
+```
+
+This installs a non-HA version of Argo, which is ok for my homelab setup.
+
+Once I get Argo running in the cluster and the pods come up and healthy, I log into the UI with the initial admin login and make sure it's responding:
+
+```bash
+argocd login --core
+argocd admin initial-password # copy the password
+argocd admin dashboard # username: admin / password copied from above
+```
+
+### Managing Applications
+
+In short, ArgoCD reacts to changes in version control systems and applies changes to Kubernetes objects in cluster. 
+
+There are a variety of ways that you can structure repositories to manage applications. For the purpose of this guide we will have of repository called `lab` that will both host the ArgoCD applications and the configuration of those apps. 
+
+I encourage you to read [this post](https://codefresh.io/blog/how-to-structure-your-argo-cd-repositories-using-application-sets/) by Kostis Kapelonis on different ways to structure your Git repos.
+
+#### App-of-Apps Pattern
+
+In order for us to avoid having to `kubectl apply` each application individually, we will leverage the [app-of-apps](https://argo-cd.readthedocs.io/en/latest/operator-manual/cluster-bootstrapping/#app-of-apps-pattern) pattern through a `root` application. 
+
+The application YAML will point to the `k8s/argocd/apps` folder which will apply all applications in the cluster for us auto magically.
+
+##### Root Application
+
+```yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: root
+  namespace: argocd # ArgoCD Application namespace
+spec:
+  destination:
+    namespace: argocd # Underlying application manifests namespace from 'k8s/argocd/apps' path
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: k8s/argocd/apps
+    repoURL: https://github.com/rafaelbroseghini/homelab.git
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+```
+
+We need to manually bootstrap the root application once and only once:
+
+```bash
+kubectl apply -f k8s/argocd/root.yaml
+```
+
+##### Managing Applications
+
+Now that our root app is applied, it will start to apply its child resources immediatelly. Below is the `argocd` application that will get applied. That's the power of ArgoCD! ArgoCD managing ArgoCD itself.
+
+```yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: argocd
+  namespace: argocd
+spec:
+  destination:
+    namespace: argocd # Underlying application manifests from 'k8s/apps/argocd/base' path
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: k8s/argocd/config/argocd/base # kustomization base folder
+    repoURL: https://github.com/rafaelbroseghini/homelab.git
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+```
+
+You can see how this process would repeat for all applications that you wish to deploy in your cluster. 
+
+We would add the `Application` yaml under the correct path in the `apps` folder and the `root` application will take care of [auto syncing](https://argo-cd.readthedocs.io/en/stable/user-guide/auto_sync/) it for us!
+
+Now head over to the ArgoCD UI `/argocd` path, and hard refresh your `root` application. You should see the `argocd` application show up and auto sync.

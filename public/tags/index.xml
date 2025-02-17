@@ -6,8 +6,15 @@
     <description>Recent content in Tags on rafaelbroseghini.com</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 01 Feb 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 16 Feb 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://rafaelbroseghini.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Homelab</title>
+      <link>https://rafaelbroseghini.com/tags/homelab/</link>
+      <pubDate>Sun, 16 Feb 2025 00:00:00 +0000</pubDate>
+      <guid>https://rafaelbroseghini.com/tags/homelab/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Productivity</title>
       <link>https://rafaelbroseghini.com/tags/productivity/</link>
