@@ -140,4 +140,4 @@ Now head over to the ArgoCD UI `/argocd` path, and hard refresh your `root` appl
 
 Using the structure at [homelab/k8s](https://github.com/rafaelbroseghini/homelab/k8s) allows me to manage a lightweight k3s cluster in my Raspberry Pi 5 with almost no manual intervention needed! 
 
-Feel free to clone/fork the repo and suggest any changes! :)
+Feel free to clone the repo and play with it! :)
