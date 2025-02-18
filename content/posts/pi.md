@@ -1,5 +1,5 @@
 +++
-title = "RaspberryPi Homelab - Part 1 - ArgoCD"
+title = "Raspberry Pi Homelab - Part 1 - ArgoCD"
 date = "2025-02-16"
 summary = "managing continuous delivery with ArgoCD & k3s"
 readTime = true
@@ -14,7 +14,7 @@ hideBackToTop = false
 
 > You can find all of the manifests for my k8s setup at my [homelab](https://github.com/rafaelbroseghini/homelab) GitHub repository.
 
-Over the past few weeks I have been playing around with my RaspberryPi 5 to host a Kubernetes cluster, a Certificate Authority using `step-ca`, some microservices and to learn physical computing.
+Over the past few weeks I have been playing around with my RaspberryPi 5 to host a `k3s` cluster, a Certificate Authority, some microservices and to learn physical computing.
 
 It's been going pretty well, but I wanted to minimize the amount of manual intervention needed from me to deploy and debug services running in my `k3s` cluster. Since I have had experience with ArgoCD, I knew it was a good tool for the job!
 
