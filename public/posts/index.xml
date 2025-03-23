@@ -6,10 +6,17 @@
     <description>Recent content in Posts on rafaelbroseghini.com</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 16 Feb 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 23 Mar 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://rafaelbroseghini.com/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>RaspberryPi Homelab - Part 1 - ArgoCD</title>
+      <title>Tailscale: Magic DNS, and Funnels</title>
+      <link>https://rafaelbroseghini.com/posts/tailscale/</link>
+      <pubDate>Sun, 23 Mar 2025 00:00:00 +0000</pubDate>
+      <guid>https://rafaelbroseghini.com/posts/tailscale/</guid>
+      <description>Accessing my homelab from anywhere in the world</description>
+    </item>
+    <item>
+      <title>Raspberry Pi Homelab - Part 1 - ArgoCD</title>
       <link>https://rafaelbroseghini.com/posts/pi/</link>
       <pubDate>Sun, 16 Feb 2025 00:00:00 +0000</pubDate>
       <guid>https://rafaelbroseghini.com/posts/pi/</guid>
