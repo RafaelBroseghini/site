@@ -6,10 +6,17 @@
     <description>Recent content in Home on rafaelbroseghini.com</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 16 Feb 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 23 Mar 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://rafaelbroseghini.com/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>RaspberryPi Homelab - Part 1 - ArgoCD</title>
+      <title>Tailscale: Magic DNS, and Funnels</title>
+      <link>https://rafaelbroseghini.com/posts/tailscale/</link>
+      <pubDate>Sun, 23 Mar 2025 00:00:00 +0000</pubDate>
+      <guid>https://rafaelbroseghini.com/posts/tailscale/</guid>
+      <description>Accessing my homelab from anywhere in the world</description>
+    </item>
+    <item>
+      <title>Raspberry Pi Homelab - Part 1 - ArgoCD</title>
       <link>https://rafaelbroseghini.com/posts/pi/</link>
       <pubDate>Sun, 16 Feb 2025 00:00:00 +0000</pubDate>
       <guid>https://rafaelbroseghini.com/posts/pi/</guid>
@@ -27,7 +34,7 @@
       <link>https://rafaelbroseghini.com/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://rafaelbroseghini.com/about/</guid>
-      <description>&lt;h1 class=&#34;heading&#34; id=&#34;whoami&#34;&gt;&#xA;  whoami&#xA;  &lt;a href=&#34;#whoami&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h1&gt;&#xA;&lt;p&gt;I am a Platform Engineer at &lt;a href=&#34;https://www.trimble.com/en&#34;&gt;Trimble,Inc&lt;/a&gt; specializing in cloud-native technologies including Azure, Kubernetes, ArgoCD, Docker, Terraform, GitHub Actions, Go, and Python.&lt;/p&gt;&#xA;&lt;p&gt;My focus is architecting, building and maintaining internal developer platforms that streamline the software delivery lifecycle. I specialize in self-service solutions that reduce deployment cycles by abstracting operational complexity while ensuring enterprise-grade security and compliance standards.&lt;/p&gt;&#xA;&lt;p&gt;I am a huge &lt;a href=&#34;https://en.wikipedia.org/wiki/Football&#34;&gt;football&lt;/a&gt; fan and travel enthusiast. I enjoy biking, reading and have recently started to get into home automation.&lt;/p&gt;</description>
+      <description>&lt;h1 class=&#34;heading&#34; id=&#34;whoami&#34;&gt;&#xA;  whoami&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#whoami&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h1&gt;&#xA;&lt;p&gt;Hello! My name is Rafael Broseghini! I am a Platform Engineer at Trimble, Inc.&lt;/p&gt;&#xA;&lt;p&gt;My current professional focus is designing and building workflows that enable self-service capabilities for software engineering teams, leveraging the cloud-native ecosystem. I specialize in solutions that accelerate deployment cycles by abstracting operational complexity while ensuring enterprise-grade security and compliance.&lt;/p&gt;&#xA;&lt;p&gt;I am a huge &lt;a href=&#34;https://en.wikipedia.org/wiki/Football&#34;&gt;football&lt;/a&gt; fan and travel enthusiast. I enjoy biking, reading, cliff jumping, skydiving and have recently started to get into home automation.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

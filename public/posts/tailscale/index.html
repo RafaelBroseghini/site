@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+
+<link rel="icon" type="image/ico" href="https://rafaelbroseghini.com/favicon/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://rafaelbroseghini.com/favicon/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://rafaelbroseghini.com/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="https://rafaelbroseghini.com/favicon/android-chrome-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://rafaelbroseghini.com/favicon/apple-touch-icon.png">
+
+<meta name="description" content=""/>
+
+
+
+<title>
+    
+    Tailscale: Magic DNS, and Funnels | rafaelbroseghini.com
+    
+</title>
+
+<link rel="canonical" href="https://rafaelbroseghini.com/posts/tailscale/"/>
+
+<meta property="og:url" content="https://rafaelbroseghini.com/posts/tailscale/">
+  <meta property="og:site_name" content="rafaelbroseghini.com">
+  <meta property="og:title" content="Tailscale: Magic DNS, and Funnels">
+  <meta property="og:description" content="Accessing my homelab from anywhere in the world">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-03-23T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-03-23T00:00:00+00:00">
+    <meta property="article:tag" content="Homelab">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.32c4505ff6f37c4a072861f2cbad7347d8e8e8c8f60e01107b50d77c8c29f9f6.css" media="all">
+
+
+
+
+
+
+<script
+  async
+  defer
+  data-website-id="9b9456bb-75e9-43da-9e93-44d014bd324f"
+  src="https://cloud.umami.is/script.js"
+></script>
+
+
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+
+    
+
+    <h1 class="header-title">
+        <a href="https://rafaelbroseghini.com/">rafaelbroseghini.com</a>
+    </h1>
+
+    <div class="flex">
+        
+
+        
+        
+      
+        <p class="small ">
+            <a href="/" >
+                /home
+            </a>
+        </p>
+        
+      
+        <p class="small ">
+            <a href="/posts" >
+                /posts
+            </a>
+        </p>
+        
+      
+        <p class="small ">
+            <a href="/about" >
+                /about
+            </a>
+        </p>
+        
+      
+        <p class="small ">
+            <a href="/tags" >
+                /tags
+            </a>
+        </p>
+        
+        
+    </div>
+
+    
+
+</div>
+
+    </header>
+
+    <main class="main">
+      
+
+
+
+
+
+<div class="breadcrumbs">
+    
+    <a href="/">Home</a>
+    <span class="breadcrumbs-separator"> > </span>
+    
+    <a href="/posts/">Posts</a>
+    <span class="breadcrumbs-separator"> > </span>
+    
+    <a class="breadcrumbs-current" href="/posts/tailscale/">Tailscale: Magic DNS, and Funnels</a>
+</div>
+
+
+
+<div >
+
+  <div class="single-intro-container">
+
+    
+
+    <h1 class="single-title">Tailscale: Magic DNS, and Funnels</h1>
+    
+    <p class="single-summary">Accessing my homelab from anywhere in the world</p>
+    
+
+    
+
+    <p class="single-readtime">
+      
+      
+      
+      <time datetime="2025-03-23T00:00:00&#43;00:00">March 23, 2025</time>
+      
+
+      
+      &nbsp; · &nbsp;
+      4 min read
+      
+    </p>
+
+  </div>
+
+  
+
+  
+  
+
+  <div class="single-tags">
+    
+    <span>
+      <a href="https://rafaelbroseghini.com/tags/homelab/">#Homelab</a>
+    </span>
+    
+    
+  </div>
+
+  
+  
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <h1 class="heading" id="introduction">
+  Introduction
+  <a class="anchor" href="#introduction">#</a>
+</h1>
+<p>This is the second blog post in my <a href="https://rafaelbroseghini.com/tags/homelab/">homelab</a> series!</p>
+<p>In part one I configured a Kubernetes cluster running on my Raspberry Pi 5 to allow inbound access using <a href="https://github.com/traefik/traefik">Traefik</a> and continuously reconcile applications from a GitHub repository using <a href="https://argo-cd.readthedocs.io/en/stable/">ArgoCD</a>.</p>
+<p>In this post I want to show how I can access my homelab from anywhere in the world using <a href="https://tailscale.com/">Tailscale</a>. What&rsquo;s the point of having a homelab if I can&rsquo;t access it from anywhere in the world at any time, right?</p>
+<h1 class="heading" id="tailscale">
+  Tailscale
+  <a class="anchor" href="#tailscale">#</a>
+</h1>
+<p>One of my main goals with setting up a homelab was to be able to access it from anywhere in the world as if I was on my local network. I did not want to publicly expose my home network at all. I had looked into several solutions to solve this problem, including multiple VPN solutions and ultimately landed on Tailscale after seeing lots of great reviews and the ease of use.</p>
+<p>I was pretty amazed at how easy it was to <a href="https://tailscale.com/kb/1017/install">set up and start using</a> it. Within 5 to 10 minutes I was able to boot up my tailnet, add three devices and be able to securely communicate between them using IP addresses/hostnames. There are tons of features to Tailscale, but in this post I want to cover Tailscale&rsquo;s Magic DNS and Funnels.</p>
+<p>The documentation is quite amazing! Along with the <a href="https://tailscale.com/kb">official docs</a>, their <a href="https://www.youtube.com/Tailscale">YouTube channel</a> covers topics in great detail, and it was one of the main sources of information I used to get up and running with Tailscale as well as learn about all the features it has to offer.</p>
+<h1 class="heading" id="magic-dns">
+  Magic DNS
+  <a class="anchor" href="#magic-dns">#</a>
+</h1>
+<p><code>Magic DNS</code> is a feature of Tailscale that automatically registers names for devices on the tailnet. For example: when I installed Tailscale on my Raspberry Pi 5, I gave it the name <code>pi</code>. When I connect to my tailnet, I can now access the Raspberry Pi reverse proxy or SSH using the names <code>pi</code>, <code>pi.xxx.ts.net</code>, a IPv6 address, and a IPv4 address.</p>
+<p>A few weeks ago I was in New York City and wanted to check on <a href="https://docs.pi-hole.net/">PiHole</a>. It was as simple as going to <code>pi:8880</code> (it&rsquo;s ok, no one else is on my tailnet) and being able to access the PiHole dashboard.</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<figure class=" img-small">
+
+    <div>
+        <img loading="lazy" alt="PiHole Dashboard" src="../../img/pihole.jpeg#small" >
+    </div>
+
+    
+    <div class="caption-container">
+        <figcaption> PiHole Dashboard </figcaption>
+    </div>
+    
+</figure>
+</p>
+<h1 class="heading" id="tailscale-funnels">
+  Tailscale Funnels
+  <a class="anchor" href="#tailscale-funnels">#</a>
+</h1>
+<p>Last week I was playing with my new <a href="https://www.raspberrypi.com/products/camera-module-3/">camera module V3</a> on my <code>pi</code> to spin up a small web FFmpeg server and stream content. I wanted to show my mom what I had come up with, but the problem is: my parents live abroad and unless they were part of my tailnet, there was no way I could quickly share a live stream with them running on my Raspberry Pi. I also wanted to do this via HTTPS and not need to create special ACLs to allow access to the port.</p>
+<p>But wait! Tailscale also solves that problem with a feature called <code>Tailscale Funnels</code>. If you&rsquo;re familiar with cloudflare tunnels, this is pretty much the same idea. You run the command <code>tailscale funnel &lt;port&gt;</code> and Tailscale creates a tunnel with IP routes from your machine up to the Tailscale servers which lets you route traffic from the broader internet to a local service running on a device in your tailnet.</p>
+<p>At this point, anyone in the world can access the content running on my Raspberry Pi. Pretty cool, right? With that being said, use it responsibly as it is legitimately exposing your machine to the public internet.</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<figure class=" img-small">
+
+    <div>
+        <img loading="lazy" alt="Funnel" src="../../img/funnel.jpeg#small" >
+    </div>
+
+    
+    <div class="caption-container">
+        <figcaption> Official Tailscale Docs - Funnel </figcaption>
+    </div>
+    
+</figure>
+</p>
+<p>The <a href="https://tailscale.com/kb/1223/funnel#how-funnel-works">official docs</a> explains how it works in great detail.</p>
+<h1 class="heading" id="whats-next">
+  What&rsquo;s next?
+  <a class="anchor" href="#whats-next">#</a>
+</h1>
+<p>I&rsquo;ve recently discovered <a href="https://selfh.st/apps/">selfh.st</a> which is a website that allows you to search for self-hosted apps and alternatives to SaaS products. I&rsquo;ve added a few apps to my list:</p>
+<ul>
+<li><a href="https://hoarder.app/">Hoarder</a></li>
+<li><a href="https://paperless-ngx.com/">Paperless-ngx</a></li>
+<li><a href="https://goauthentik.io/">Authentik</a></li>
+</ul>
+<p>My plan is to continue to play around with my homelab and see what other cool things I can do with it. It&rsquo;s quite refreshing to play around, break things and learn from it, without it being mission critical :) See you in the next post!</p>
+
+    
+  </div>
+
+  
+
+
+  
+
+  
+  
+
+<div class="single-pagination">
+    <hr />
+
+    <div class="flex">
+
+        <div class="single-pagination-prev">
+            
+            <div class="single-pagination-container-prev">
+                <div class="single-pagination-text">←</div>
+                <div class="single-pagination-text">
+                    <a href="/posts/pi/">
+                        Raspberry Pi Homelab - Part 1 - ArgoCD
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="single-pagination-next">
+            
+        </div>
+
+    </div>
+
+    <hr />
+</div>
+
+
+
+  
+
+  
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    
+
+
+  </footer>
+
+  
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
+<script defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
+
+<script defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body);"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "$", right: "$", display: false }
+      ]
+    });
+  });
+</script>
+  
+
+</body>
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    document.body.classList.remove("auto");
+    let cls = "light";
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+  }
+
+  function invertBody() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invertBody);
+  }
+
+  setTheme();
+
+</script>
+
+<script defer src="/js/copy-code.js"></script>
+</html>

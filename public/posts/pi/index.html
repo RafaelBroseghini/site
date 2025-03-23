@@ -2,8 +2,8 @@
 <html lang="en-us"
   dir="ltr">
 
-  <head>
-    <meta charset="utf-8">
+<head>
+  <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
 
 
@@ -16,9 +16,11 @@
 
 <meta name="description" content=""/>
 
+
+
 <title>
     
-    RaspberryPi Homelab - Part 1 - ArgoCD | rafaelbroseghini.com
+    Raspberry Pi Homelab - Part 1 - ArgoCD | rafaelbroseghini.com
     
 </title>
 
@@ -26,7 +28,7 @@
 
 <meta property="og:url" content="https://rafaelbroseghini.com/posts/pi/">
   <meta property="og:site_name" content="rafaelbroseghini.com">
-  <meta property="og:title" content="RaspberryPi Homelab - Part 1 - ArgoCD">
+  <meta property="og:title" content="Raspberry Pi Homelab - Part 1 - ArgoCD">
   <meta property="og:description" content="managing continuous delivery with ArgoCD &amp; k3s">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
@@ -47,7 +49,7 @@
 
 
 
-<link rel="stylesheet" href="/assets/combined.min.186794b3399a702d3092949042cdc215dea303c17e71e7c0254768448de11db8.css" media="all">
+<link rel="stylesheet" href="/assets/combined.min.32c4505ff6f37c4a072861f2cbad7347d8e8e8c8f60e01107b50d77c8c29f9f6.css" media="all">
 
 
 
@@ -65,19 +67,19 @@
 
 
 
-  </head>
+</head>
 
-  
 
-  
-  
-  
 
-  <body class="auto">
 
-    <div class="content">
-      <header>
-        
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
 
 <div class="header">
 
@@ -127,10 +129,10 @@
 
 </div>
 
-      </header>
+    </header>
 
-      <main class="main">
-        
+    <main class="main">
+      
 
 
 
@@ -144,7 +146,7 @@
     <a href="/posts/">Posts</a>
     <span class="breadcrumbs-separator"> > </span>
     
-    <a class="breadcrumbs-current" href="/posts/pi/">RaspberryPi Homelab - Part 1 - ArgoCD</a>
+    <a class="breadcrumbs-current" href="/posts/pi/">Raspberry Pi Homelab - Part 1 - ArgoCD</a>
 </div>
 
 
@@ -155,7 +157,7 @@
 
     
 
-    <h1 class="single-title">RaspberryPi Homelab - Part 1 - ArgoCD</h1>
+    <h1 class="single-title">Raspberry Pi Homelab - Part 1 - ArgoCD</h1>
     
     <p class="single-summary">managing continuous delivery with ArgoCD &amp; k3s</p>
     
@@ -203,11 +205,13 @@
   <div class="single-content">
     <h1 class="heading" id="introduction">
   Introduction
-  <a href="#introduction">#</a>
+  <a class="anchor" href="#introduction">#</a>
 </h1>
-<p>Over the past few weeks I have been playing around with my RaspberryPi 5 to host a Kubernetes cluster, a Certificate Authority using <code>step-ca</code>, some microservices and to learn physical computing.</p>
+<blockquote>
+<p>You can find all of the manifests for my k8s setup at my <a href="https://github.com/rafaelbroseghini/homelab">homelab</a> GitHub repository.</p></blockquote>
+<p>Over the past few weeks I have been playing around with my RaspberryPi 5 to host a <code>k3s</code> cluster, a Certificate Authority, some microservices and to learn physical computing.</p>
 <p>It&rsquo;s been going pretty well, but I wanted to minimize the amount of manual intervention needed from me to deploy and debug services running in my <code>k3s</code> cluster. Since I have had experience with ArgoCD, I knew it was a good tool for the job!</p>
-<p>I wanted to get that up and running on my Raspberry Pi and be able to access it from my home network or anywhere in the world (thanks to <a href="https://tailscale.com">Tailscale</a>! - more on it on another post).</p>
+<p>The ultimate goal is to get the cluster up and running on my Raspberry Pi and be able to <strong>securely</strong> access it not only from my home network but also <strong>anywhere in the world</strong> (thanks to <a href="https://tailscale.com">Tailscale</a>! - more on it on another post).</p>
 <p>
 
 
@@ -239,45 +243,46 @@
 <hr>
 <h2 class="heading" id="k3s">
   K3s
-  <a href="#k3s">#</a>
+  <a class="anchor" href="#k3s">#</a>
 </h2>
 <p>My Raspberry Pi kubernetes cluster runs on a k3s distribution, which is packaged as a single &lt;70MB binary. Perfect for my use case!</p>
-<p><a href="https://docs.k3s.io/quick-start#install-script">Following the docs</a>, to get a <code>k3s</code> cluster up and running on your 1 node RaspberryPi cluster all you need to do is run:</p>
-<div class="highlight"><pre tabindex="0" style="color:#c6d0f5;background-color:#303446;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -sfL https://get.k3s.io | sh -
-</span></span><span style="display:flex;"><span>sudo <span style="color:#99d1db">echo</span> <span style="color:#a6d189">&#34;cgroup_memory=1 cgroup_enable=memory&#34;</span> &gt;&gt; /boot/firmware/cmdline.txt
+<p><a href="https://docs.k3s.io/quick-start#install-script">Following the docs</a>, to get a <code>k3s</code> cluster up and running on my 1 node RaspberryPi cluster all I need to do is run:</p>
+<p>Add <code>cgroup_memory=1 cgroup_enable=memory</code> to the end of <code>/boot/firmware/cmdline.txt</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#c6d0f5;background-color:#303446;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo reboot
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#c6d0f5;background-color:#303446;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -sfL https://get.k3s.io | sh -
 </span></span></code></pre></div><h2 class="heading" id="argocd">
   ArgoCD
-  <a href="#argocd">#</a>
+  <a class="anchor" href="#argocd">#</a>
 </h2>
-<p>From the ArgoCD docs: <code>Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes.</code> It&rsquo;s a pretty amazing project and I encourage <a href="https://argo-cd.readthedocs.io/en/stable/">you to head over to the docs</a> to learn more!</p>
+<p><code>Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes.</code> It&rsquo;s an amazing project with a large active community! I encourage <a href="https://argo-cd.readthedocs.io/en/stable/">you to head over to the docs</a> to learn more if you&rsquo;re interested!</p>
 <h3 class="heading" id="how-i-bootstrap-argocd">
   How I bootstrap ArgoCD
-  <a href="#how-i-bootstrap-argocd">#</a>
+  <a class="anchor" href="#how-i-bootstrap-argocd">#</a>
 </h3>
 <p>I personally pick the version of ArgoCD I want to deploy on my cluster and run:</p>
 <div class="highlight"><pre tabindex="0" style="color:#c6d0f5;background-color:#303446;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl create namespace argocd
 </span></span><span style="display:flex;"><span>kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/&lt;VERSION&gt;/manifests/install.yaml
 </span></span></code></pre></div><p>This installs a non-HA version of Argo, which is ok for my homelab setup.</p>
-<p>Once I get Argo running in the cluster and the pods come up and healthy, I log into the UI with the initial admin login and make sure it&rsquo;s responding:</p>
+<p>Once I get Argo running in the cluster and the pods come up and healthy, I log into the UI with the initial admin login and make sure it&rsquo;s properly responding:</p>
 <div class="highlight"><pre tabindex="0" style="color:#c6d0f5;background-color:#303446;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>argocd login --core
 </span></span><span style="display:flex;"><span>argocd admin initial-password <span style="color:#737994;font-style:italic"># copy the password</span>
 </span></span><span style="display:flex;"><span>argocd admin dashboard <span style="color:#737994;font-style:italic"># username: admin / password copied from above</span>
 </span></span></code></pre></div><h3 class="heading" id="managing-applications">
   Managing Applications
-  <a href="#managing-applications">#</a>
+  <a class="anchor" href="#managing-applications">#</a>
 </h3>
-<p>In short, ArgoCD reacts to changes in version control systems and applies changes to Kubernetes objects in cluster.</p>
-<p>There are a variety of ways that you can structure repositories to manage applications. For the purpose of this guide we will have of repository called <code>lab</code> that will both host the ArgoCD applications and the configuration of those apps.</p>
+<p>In short, ArgoCD reacts to changes in version control systems and applies changes to Kubernetes objects in cluster(s).</p>
+<p>There are a variety of ways that you can structure repositories to manage applications. For the purpose of this guide we will have of repository called <code>homelab</code> that will both host the ArgoCD applications and the configuration of those apps.</p>
 <p>I encourage you to read <a href="https://codefresh.io/blog/how-to-structure-your-argo-cd-repositories-using-application-sets/">this post</a> by Kostis Kapelonis on different ways to structure your Git repos.</p>
 <h4 class="heading" id="app-of-apps-pattern">
   App-of-Apps Pattern
-  <a href="#app-of-apps-pattern">#</a>
+  <a class="anchor" href="#app-of-apps-pattern">#</a>
 </h4>
-<p>In order for us to avoid having to <code>kubectl apply</code> each application individually, we will leverage the <a href="https://argo-cd.readthedocs.io/en/latest/operator-manual/cluster-bootstrapping/#app-of-apps-pattern">app-of-apps</a> pattern through a <code>root</code> application.</p>
-<p>The application YAML will point to the <code>k8s/argocd/apps</code> folder which will apply all applications in the cluster for us auto magically.</p>
+<p>In order for us to <strong>avoid</strong> having to <code>kubectl apply -f</code> each application individually, we will leverage the <a href="https://argo-cd.readthedocs.io/en/latest/operator-manual/cluster-bootstrapping/#app-of-apps-pattern">app-of-apps</a> pattern through a <code>root</code> application. One of the main goals was to manually intervene as little as possible!</p>
+<p>The application YAML will point to the <code>k8s/apps</code> folder which will apply all applications in the cluster for us auto magically.</p>
 <h5 class="heading" id="root-application">
   Root Application
-  <a href="#root-application">#</a>
+  <a class="anchor" href="#root-application">#</a>
 </h5>
 <div class="highlight"><pre tabindex="0" style="color:#c6d0f5;background-color:#303446;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ca9ee6">apiVersion</span>: argoproj.io/v1alpha1
 </span></span><span style="display:flex;"><span><span style="color:#ca9ee6">kind</span>: Application
@@ -285,14 +290,14 @@
 </span></span><span style="display:flex;"><span>  <span style="color:#ca9ee6">finalizers</span>:
 </span></span><span style="display:flex;"><span>    - resources-finalizer.argocd.argoproj.io
 </span></span><span style="display:flex;"><span>  <span style="color:#ca9ee6">name</span>: root
-</span></span><span style="display:flex;"><span>  <span style="color:#ca9ee6">namespace</span>: argocd <span style="color:#737994;font-style:italic"># ArgoCD Application namespace</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ca9ee6">namespace</span>: argocd
 </span></span><span style="display:flex;"><span><span style="color:#ca9ee6">spec</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#ca9ee6">destination</span>:
-</span></span><span style="display:flex;"><span>    <span style="color:#ca9ee6">namespace</span>: argocd <span style="color:#737994;font-style:italic"># Underlying application manifests namespace from &#39;k8s/argocd/apps&#39; path</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ca9ee6">namespace</span>: argocd
 </span></span><span style="display:flex;"><span>    <span style="color:#ca9ee6">server</span>: https://kubernetes.default.svc
 </span></span><span style="display:flex;"><span>  <span style="color:#ca9ee6">project</span>: default
 </span></span><span style="display:flex;"><span>  <span style="color:#ca9ee6">source</span>:
-</span></span><span style="display:flex;"><span>    <span style="color:#ca9ee6">path</span>: k8s/argocd/apps
+</span></span><span style="display:flex;"><span>    <span style="color:#ca9ee6">path</span>: k8s/apps
 </span></span><span style="display:flex;"><span>    <span style="color:#ca9ee6">repoURL</span>: https://github.com/rafaelbroseghini/homelab.git
 </span></span><span style="display:flex;"><span>    <span style="color:#ca9ee6">targetRevision</span>: HEAD
 </span></span><span style="display:flex;"><span>  <span style="color:#ca9ee6">syncPolicy</span>:
@@ -300,10 +305,10 @@
 </span></span><span style="display:flex;"><span>      <span style="color:#ca9ee6">prune</span>: <span style="color:#ef9f76">true</span>
 </span></span><span style="display:flex;"><span>      <span style="color:#ca9ee6">selfHeal</span>: <span style="color:#ef9f76">true</span>
 </span></span></code></pre></div><p>We need to manually bootstrap the root application once and only once:</p>
-<div class="highlight"><pre tabindex="0" style="color:#c6d0f5;background-color:#303446;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl apply -f k8s/argocd/root.yaml
+<div class="highlight"><pre tabindex="0" style="color:#c6d0f5;background-color:#303446;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl apply -f k8s/root.yaml
 </span></span></code></pre></div><h5 class="heading" id="managing-applications-1">
   Managing Applications
-  <a href="#managing-applications-1">#</a>
+  <a class="anchor" href="#managing-applications-1">#</a>
 </h5>
 <p>Now that our root app is applied, it will start to apply its child resources immediatelly. Below is the <code>argocd</code> application that will get applied. That&rsquo;s the power of ArgoCD! ArgoCD managing ArgoCD itself.</p>
 <div class="highlight"><pre tabindex="0" style="color:#c6d0f5;background-color:#303446;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ca9ee6">apiVersion</span>: argoproj.io/v1alpha1
@@ -315,25 +320,47 @@
 </span></span><span style="display:flex;"><span>  <span style="color:#ca9ee6">namespace</span>: argocd
 </span></span><span style="display:flex;"><span><span style="color:#ca9ee6">spec</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#ca9ee6">destination</span>:
-</span></span><span style="display:flex;"><span>    <span style="color:#ca9ee6">namespace</span>: argocd <span style="color:#737994;font-style:italic"># Underlying application manifests from &#39;k8s/apps/argocd/base&#39; path</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ca9ee6">namespace</span>: argocd
 </span></span><span style="display:flex;"><span>    <span style="color:#ca9ee6">server</span>: https://kubernetes.default.svc
 </span></span><span style="display:flex;"><span>  <span style="color:#ca9ee6">project</span>: default
 </span></span><span style="display:flex;"><span>  <span style="color:#ca9ee6">source</span>:
-</span></span><span style="display:flex;"><span>    <span style="color:#ca9ee6">path</span>: k8s/argocd/config/argocd/base <span style="color:#737994;font-style:italic"># kustomization base folder</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ca9ee6">path</span>: k8s/config/argocd/base
 </span></span><span style="display:flex;"><span>    <span style="color:#ca9ee6">repoURL</span>: https://github.com/rafaelbroseghini/homelab.git
 </span></span><span style="display:flex;"><span>    <span style="color:#ca9ee6">targetRevision</span>: HEAD
 </span></span><span style="display:flex;"><span>  <span style="color:#ca9ee6">syncPolicy</span>:
 </span></span><span style="display:flex;"><span>    <span style="color:#ca9ee6">automated</span>:
 </span></span><span style="display:flex;"><span>      <span style="color:#ca9ee6">prune</span>: <span style="color:#ef9f76">true</span>
 </span></span><span style="display:flex;"><span>      <span style="color:#ca9ee6">selfHeal</span>: <span style="color:#ef9f76">true</span>
-</span></span></code></pre></div><p>You can see how this process would repeat for all applications that you wish to deploy in your cluster.</p>
+</span></span></code></pre></div><p>I hope you can see how this process would repeat for any application(s) that you wish to deploy in your cluster.</p>
 <p>We would add the <code>Application</code> yaml under the correct path in the <code>apps</code> folder and the <code>root</code> application will take care of <a href="https://argo-cd.readthedocs.io/en/stable/user-guide/auto_sync/">auto syncing</a> it for us!</p>
 <p>Now head over to the ArgoCD UI <code>/argocd</code> path, and hard refresh your <code>root</code> application. You should see the <code>argocd</code> application show up and auto sync.</p>
-<h3 class="heading" id="conclusion">
-  Conclusion
-  <a href="#conclusion">#</a>
-</h3>
-<p>Using the structure at <a href="https://github.com/rafaelbroseghini/homelab/argocd">github.com/rafaelbroseghini/homelab/argocd</a> allows me to manage a lightweight k8s cluster in my Raspberry Pi 5. Feel free to clone/fork the repo and suggest any changes!</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="argocd" src="../../img/argo.png" >
+    </div>
+
+    
+    <div class="caption-container">
+        <figcaption> ArgoCD managing ArgoCD :-) </figcaption>
+    </div>
+    
+</figure>
+</p>
+<p>Using the structure at <a href="https://github.com/rafaelbroseghini/homelab/k8s">homelab/k8s</a> allows me to manage a lightweight k3s cluster in my Raspberry Pi 5 with almost no manual intervention needed!</p>
+<p>Feel free to clone the repo and play with it! :)</p>
 
     
   </div>
@@ -366,6 +393,15 @@
 
         <div class="single-pagination-next">
             
+            <div class="single-pagination-container-next">
+                <div class="single-pagination-text">
+                    <a href="/posts/tailscale/">
+                        Tailscale: Magic DNS, and Funnels
+                    </a>
+                </div>
+                <div class="single-pagination-text">→</div>
+            </div>
+            
         </div>
 
     </div>
@@ -390,17 +426,17 @@
 </div>
 
 
-      </main>
-    </div>
+    </main>
+  </div>
 
-    <footer>
-      
-
-
-    </footer>
-
+  <footer>
     
-    <link rel="stylesheet"
+
+
+  </footer>
+
+  
+  <link rel="stylesheet"
   href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
 <script defer
   src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
@@ -419,11 +455,11 @@
     });
   });
 </script>
-    
+  
 
-  </body>
+</body>
 
-  <script>
+<script>
 
   function isAuto() {
     return document.body.classList.contains("auto");
@@ -456,4 +492,5 @@
 
 </script>
 
+<script defer src="/js/copy-code.js"></script>
 </html>
