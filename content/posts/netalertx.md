@@ -9,8 +9,6 @@ showTags = true
 hideBackToTop = false
 +++
 
-# Watching the LAN with Netalertx
-
 A few weeks ago I had an itch. I wanted to be able to watch my LAN and see exactly what devices were connected to it. I can login to my router and see the devices connected, but I honestly wanted to use a tool that I could run on my Raspberry Pi 5. Something with a nice UI and easily deployable.
 
 I headed over to [r/selfhosted](https://www.reddit.com/r/selfhosted/) and searched for something like "watch my network" and [Netalertx](https://github.com/jokob-sk/netalertx) had pretty good reviews. [WatchYourLAN](https://github.com/aceberg/WatchYourLAN) was another tool with positive reviews! NetAlertX looked like it had a more feature rich UI, so I went with that.
