@@ -6,8 +6,15 @@
     <description>Recent content in Home on rafaelbroseghini.com</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 29 Apr 2025 22:12:06 -0500</lastBuildDate>
+    <lastBuildDate>Tue, 02 Sep 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://rafaelbroseghini.com/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>uuid7 - indexable and time sortable</title>
+      <link>https://rafaelbroseghini.com/posts/uuid7/</link>
+      <pubDate>Tue, 02 Sep 2025 00:00:00 +0000</pubDate>
+      <guid>https://rafaelbroseghini.com/posts/uuid7/</guid>
+      <description>50 nanosecond resolution</description>
+    </item>
     <item>
       <title>Watching the LAN with Netalertx</title>
       <link>https://rafaelbroseghini.com/posts/netalertx/</link>
