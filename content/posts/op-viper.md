@@ -1,9 +1,9 @@
 +++
 date = '2025-09-25T18:11:08-05:00'
 title = '1Password and Go Configuration'
-summary = 'injecting 1password values securely at runtime'
+summary = 'injecting 1Password values securely at runtime'
 readTime = true
-tags = ['go', '1password']
+tags = ['go', '1Password']
 showTags = true
 hideBackToTop = false
 +++
@@ -12,11 +12,11 @@ hideBackToTop = false
 
 As with any application, I needed to configure it with a variety of settings. Some could be public and fixed, others were sensitive and needed to be stored securely.
 
-The common approach is to bring environment variables into the application using some process. Maybe a `.env` file, bash scripts, etc. When it comes to remote deployment your process might actually look slightly different. You might have a CI/CD pipeline that takes care of setting the environment variables or a secret management solution that injects them into your deployment.
+The common approach is to bring environment variables into the application using some process. Maybe a `.env` file, bash scripts, etc. When it comes to remote deployment, your process might actually look slightly different. You might have a CI/CD pipeline that takes care of setting the environment variables or a secret management solution that injects them into your deployment.
 
 I have used a combination of both approaches over the years. They work fine and follow the 12 factor app principles. Great!
 
-For the sake of velocity, I wanted to find a way to store my configuration homogeneously across environments while still being able to manage them securely.
+For the sake of velocity, I wanted to find a way to store my configuration consistently across environments while still being able to manage them securely.
 
 ## Enter 1Password
 
@@ -76,10 +76,10 @@ func main() {
 }
 ```
 
-As part of the unmarshalling, `op-viper` will replace 1password references with the actual values and bind them to the `Config` struct.
+As part of the unmarshalling, `op-viper` will replace 1Password references with the actual values and bind them to the `Config` struct.
 
-This allows me to ditch `.env` files, bash scripts, and other approaches to inject configuration into my application and use a consistent approach to managing my configuration.
+This allows me to ditch `.env` files, bash scripts, and other approaches to inject configuration and to use a consistent approach to managing configuration across environments.
 
-I have to be transparent and say that I changes to 1password references would require a re-deployment of the application, which might not be ideal for some use cases. If you work solo or in a small team where configuration might not change frequently, this might be a good fit for you :)
+I have to be transparent and say that changes to 1Password references would require a re-deployment of the application, which might not be ideal for some use cases. If you work solo or in a small team where configuration might not change frequently, this might be a good fit for you :)
 
 Check out the [repository](https://github.com/rafaelbroseghini/op-viper) for more details!

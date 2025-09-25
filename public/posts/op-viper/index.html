@@ -269,8 +269,8 @@
 </span></span><span style="display:flex;"><span>    v.<span style="color:#8caaee">Unmarshal</span>(<span style="color:#99d1db;font-weight:bold">&amp;</span>config, viper.<span style="color:#8caaee">DecodeHook</span>(l.<span style="color:#8caaee">OnePasswordHookFunc</span>(context.<span style="color:#8caaee">Background</span>())))
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>As part of the unmarshalling, <code>op-viper</code> will replace 1password references with the actual values and bind them to the <code>Config</code> struct.</p>
-<p>This allows me to ditch <code>.env</code> files, bash scripts, and other approaches to inject configuration into my application and use a consistent approach to managing my configuration.</p>
-<p>I have to be transparent and say that I changes to 1password references would require a re-deployment of the application, which might not be ideal for some use cases. If you work solo or in a small team where configuration might not change frequently, this might be a good fit for you :)</p>
+<p>This allows me to ditch <code>.env</code> files, bash scripts, and other approaches to inject configuration and use a consistent approach to managing configuration across environments.</p>
+<p>I have to be transparent and say that changes to 1password references would require a re-deployment of the application, which might not be ideal for some use cases. If you work solo or in a small team where configuration might not change frequently, this might be a good fit for you :)</p>
 <p>Check out the <a href="https://github.com/rafaelbroseghini/op-viper">repository</a> for more details!</p>
 
     
