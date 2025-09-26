@@ -6,14 +6,14 @@
     <description>Recent content in Posts on rafaelbroseghini.com</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 25 Sep 2025 18:11:08 -0500</lastBuildDate>
+    <lastBuildDate>Thu, 25 Sep 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://rafaelbroseghini.com/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>1Password and Go Configuration</title>
       <link>https://rafaelbroseghini.com/posts/op-viper/</link>
-      <pubDate>Thu, 25 Sep 2025 18:11:08 -0500</pubDate>
+      <pubDate>Thu, 25 Sep 2025 00:00:00 +0000</pubDate>
       <guid>https://rafaelbroseghini.com/posts/op-viper/</guid>
-      <description>injecting 1password values securely at runtime</description>
+      <description>injecting 1Password values securely at runtime</description>
     </item>
     <item>
       <title>uuid7 - indexable and time sortable</title>

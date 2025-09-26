@@ -8,6 +8,18 @@
 
 
 
+
+
+
+
+
+    
+
+
+
+
+
+
 <link rel="icon" type="image/ico" href="https://rafaelbroseghini.com/favicon/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://rafaelbroseghini.com/favicon/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://rafaelbroseghini.com/favicon/favicon-32x32.png">
@@ -46,8 +58,7 @@ I am a huge football fan and travel enthusiast. I enjoy biking, reading, cliff j
 
 
 
-
-<link rel="stylesheet" href="/assets/combined.min.32c4505ff6f37c4a072861f2cbad7347d8e8e8c8f60e01107b50d77c8c29f9f6.css" media="all">
+<link rel="stylesheet" href="/assets/combined.min.56b1873d8852f8a5a109abda36c1bfcde55cb48e5bcbe0d8c934a196a7dc374a.css" media="all">
 
 
 
@@ -61,6 +72,17 @@ I am a huge football fan and travel enthusiast. I enjoy biking, reading, cliff j
   src="https://cloud.umami.is/script.js"
 ></script>
 
+
+
+
+
+
+
+
+
+
+
+    
 
 
 
@@ -87,34 +109,38 @@ I am a huge football fan and travel enthusiast. I enjoy biking, reading, cliff j
         <a href="https://rafaelbroseghini.com/">rafaelbroseghini.com</a>
     </h1>
 
-    <div class="flex">
+    <div class="header-menu">
         
 
         
         
-      
-        <p class="small ">
+
+        <p
+            class="small ">
             <a href="/" >
                 /home
             </a>
         </p>
         
-      
-        <p class="small ">
+
+        <p
+            class="small ">
             <a href="/posts" >
                 /posts
             </a>
         </p>
         
-      
-        <p class="small ">
+
+        <p
+            class="small ">
             <a href="/about" >
                 /about
             </a>
         </p>
         
-      
-        <p class="small ">
+
+        <p
+            class="small ">
             <a href="/tags" >
                 /tags
             </a>
@@ -135,46 +161,21 @@ I am a huge football fan and travel enthusiast. I enjoy biking, reading, cliff j
 
 
 
-
-<div class="breadcrumbs">
-    
-    <a href="/">Home</a>
-    <span class="breadcrumbs-separator"> > </span>
-    
-    <a class="breadcrumbs-current" href="/about/"></a>
-</div>
-
+<div class="breadcrumbs"><a href="/">Home</a><span class="breadcrumbs-separator">/</span>
+        <a href="/about/"></a></div>
 
 
 <div >
-
-  <div class="single-intro-container">
-
+  <article>
+    <header class="single-intro-container">
+        
+        <h1 class="single-title"></h1>
+        
+        
+    </header>
     
-
-    <h1 class="single-title"></h1>
-    
-
-    
-
-    <p class="single-readtime">
-      
-
-      
-    </p>
-
-  </div>
-
-  
-
-  
-
-  
-
-  
-
-  <div class="single-content">
-    <h1 class="heading" id="whoami">
+    <div class="single-content">
+      <h1 class="heading" id="whoami">
   whoami
   <a class="anchor" href="#whoami">#</a>
 </h1>
@@ -182,11 +183,10 @@ I am a huge football fan and travel enthusiast. I enjoy biking, reading, cliff j
 <p>My current professional focus is designing and building workflows that enable self-service capabilities for software engineering teams, leveraging the cloud-native ecosystem. I specialize in solutions that accelerate deployment cycles by abstracting operational complexity while ensuring enterprise-grade security and compliance.</p>
 <p>I am a huge <a href="https://en.wikipedia.org/wiki/Football">football</a> fan and travel enthusiast. I enjoy biking, reading, cliff jumping, skydiving and have recently started to get into home automation.</p>
 
-    
-  </div>
+    </div>
+  </article>
 
   
-
 
   
 
@@ -211,6 +211,18 @@ I am a huge football fan and travel enthusiast. I enjoy biking, reading, cliff j
     </main>
   </div>
 
+  
+  
+
+
+
+
+
+    
+
+
+
+
   <footer>
     
 
@@ -218,41 +230,8 @@ I am a huge football fan and travel enthusiast. I enjoy biking, reading, cliff j
   </footer>
 
   
-
 </body>
 
-<script>
-
-  function isAuto() {
-    return document.body.classList.contains("auto");
-  }
-
-  function setTheme() {
-    if (!isAuto()) {
-      return
-    }
-
-    document.body.classList.remove("auto");
-    let cls = "light";
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      cls = "dark";
-    }
-
-    document.body.classList.add(cls);
-  }
-
-  function invertBody() {
-    document.body.classList.toggle("dark");
-    document.body.classList.toggle("light");
-  }
-
-  if (isAuto()) {
-    window.matchMedia('(prefers-color-scheme: dark)').addListener(invertBody);
-  }
-
-  setTheme();
-
-</script>
-
+<script src="/js/theme-switch.js"></script>
 <script defer src="/js/copy-code.js"></script>
 </html>

@@ -23,12 +23,13 @@ paginationSize = 100
 listSummaries = true
 listDateFormat = '2 Jan 2006'
 
-# Breadcrumbs
-breadcrumbs = true
-
 showFooter = false
 
 faviconPath = 'favicon'
+
+# Breadcrumbs
+[params.breadcrumbs]
+enabled = true
 
 [params.umami]
 enable = true
