@@ -31,7 +31,12 @@ The documentation is quite amazing! Along with the [official docs](https://tails
 
 A few weeks ago I was in New York City and wanted to check on [PiHole](https://docs.pi-hole.net/). It was as simple as going to `pi:8880` (it's ok, no one else is on my tailnet) and being able to access the PiHole dashboard.
 
-![PiHole Dashboard](../../img/pihole.jpeg#small "PiHole Dashboard")
+{{< figure
+  src="/img/pihole.jpeg"
+  alt="PiHole Dashboard"
+  caption="PiHole Dashboard"
+  
+>}}
 
 # Tailscale Funnels
 
@@ -41,7 +46,12 @@ But wait! Tailscale also solves that problem with a feature called `Tailscale Fu
 
 At this point, anyone in the world can access the content running on my Raspberry Pi. Pretty cool, right? With that being said, use it responsibly as it is legitimately exposing your machine to the public internet.
 
-![Funnel](../../img/funnel.jpeg#small "Official Tailscale Docs - Funnel")
+{{< figure
+  src="/img/funnel.jpeg"
+  alt="Official Tailscale Docs - Funnel"
+  caption="Official Tailscale Docs - Funnel"
+  
+>}}
 
 The [official docs](https://tailscale.com/kb/1223/funnel#how-funnel-works) explains how it works in great detail.
 

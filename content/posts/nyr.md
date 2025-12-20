@@ -41,4 +41,7 @@ My solution was simple and it involves another widget. Well, I use my phone a lo
 The biggest takeaway I got from this is that: physically seeing reminders/tasks/notes has helped me not forget them about them. I have also started to incorporate that into the layout of my house. For example, I take vitamins every morning. When they were in the cabinet I would often forget to take them. I moved them to the counter and now I see them every morning and take them. Sometimes the little do make the biggest difference.
 
 ---
-![widget](../../img/widget.jpeg#small)
+{{< figure
+  src="/img/widget.jpeg"
+  alt="widget"
+>}}

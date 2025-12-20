@@ -28,7 +28,12 @@ docker run -d --rm --network=host \
 
 I did need to set the correct network interface in the UI and after a few minutes I was able to see the LAN topology!
 
-![Netalertx](../../img/netalert.png "Netalertx")
+{{< figure
+  src="/img/netalert.png"
+  alt="Netalertx"
+  caption="Netalertx"
+  
+>}}
 
 ## Next steps
 

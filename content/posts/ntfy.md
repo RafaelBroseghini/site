@@ -27,7 +27,11 @@ Simon's post does a great job explaining the git scraping pattern. You commit ch
 
 Git solved the tracking problem, but I wanted to know *when* and *what* changed without manually checking the repo. GitHub's watch feature works at the repository level, which is too broad. 
 
-![ghwatch](../../img/ghwatch.png "GitHub Watch")
+{{< figure
+  src="/img/ghwatch.png"
+  alt="GitHub Watch"
+  caption="GitHub Watch"
+>}}
 
 I actually ended up turning off most notifications in GitHub because I was getting so much stuff.
 
@@ -98,7 +102,12 @@ jobs:
 
 Pretty cool! now whenever there are any changes to the content I'm watching, I get a push notification and can see the markdown diff right in the notification event history:
 
-![notification](../../img/notification.png "Notifications History")
+{{< figure
+  src="/img/notification.png"
+  alt="Notifications History"
+  caption="Notifications History"
+  
+>}}
 
 **Mission accomplished: Git Scraping, Free, Self-hosted.**
 

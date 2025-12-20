@@ -20,7 +20,11 @@ It's been going pretty well, but I wanted to minimize the amount of manual inter
 
 The ultimate goal is to get the cluster up and running on my Raspberry Pi and be able to **securely** access it not only from my home network but also **anywhere in the world** (thanks to [Tailscale](https://tailscale.com)! - more on it on another post).
 
-![pi](../../img/raspi.jpeg#small "One Node Home Server - Raspberry Pi 5")
+{{< figure
+  src="/img/raspi.jpeg"
+  alt="One Node Home Server - Raspberry Pi 5"
+  caption="One Node Home Server - Raspberry Pi 5"
+>}}
 
 ---
 
@@ -141,7 +145,12 @@ We would add the `Application` yaml under the correct path in the `apps` folder 
 
 Now head over to the ArgoCD UI `/argocd` path, and hard refresh your `root` application. You should see the `argocd` application show up and auto sync.
 
-![argocd](../../img/argo.png "ArgoCD managing ArgoCD :-)")
+{{< figure
+  src="/img/argo.png"
+  alt="ArgoCD managing ArgoCD :-)"
+  caption="ArgoCD managing ArgoCD :-)"
+  
+>}}
 
 Using the structure at [homelab/k8s](https://github.com/rafaelbroseghini/homelab/k8s) allows me to manage a lightweight k3s cluster in my Raspberry Pi 5 with almost no manual intervention needed! 
 

@@ -202,33 +202,12 @@
 <p>Over the past few weeks I have been playing around with my RaspberryPi 5 to host a <code>k3s</code> cluster, a Certificate Authority, some microservices and to learn physical computing.</p>
 <p>It&rsquo;s been going pretty well, but I wanted to minimize the amount of manual intervention needed from me to deploy and debug services running in my <code>k3s</code> cluster. Since I have had experience with ArgoCD, I knew it was a good tool for the job!</p>
 <p>The ultimate goal is to get the cluster up and running on my Raspberry Pi and be able to <strong>securely</strong> access it not only from my home network but also <strong>anywhere in the world</strong> (thanks to <a href="https://tailscale.com">Tailscale</a>! - more on it on another post).</p>
-<p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<figure class=" img-small">
-
-    
-    
-
-    
-    <div class="caption-container">
-        <figcaption> One Node Home Server - Raspberry Pi 5 </figcaption>
-    </div>
-    
+<figure><img src="/img/raspi.jpeg"
+    alt="One Node Home Server - Raspberry Pi 5"><figcaption>
+      <p>One Node Home Server - Raspberry Pi 5</p>
+    </figcaption>
 </figure>
-</p>
+
 <hr>
 <h2 class="heading" id="k3s">
   K3s
@@ -344,30 +323,12 @@
 <p>I hope you can see how this process would repeat for any application(s) that you wish to deploy in your cluster.</p>
 <p>We would add the <code>Application</code> yaml under the correct path in the <code>apps</code> folder and the <code>root</code> application will take care of <a href="https://argo-cd.readthedocs.io/en/stable/user-guide/auto_sync/">auto syncing</a> it for us!</p>
 <p>Now head over to the ArgoCD UI <code>/argocd</code> path, and hard refresh your <code>root</code> application. You should see the <code>argocd</code> application show up and auto sync.</p>
-<p>
-
-
-
-
-
-
-
-
-
-
-
-<figure class="">
-
-    
-    
-
-    
-    <div class="caption-container">
-        <figcaption> ArgoCD managing ArgoCD :-) </figcaption>
-    </div>
-    
+<figure><img src="/img/argo.png"
+    alt="ArgoCD managing ArgoCD :-)"><figcaption>
+      <p>ArgoCD managing ArgoCD :-)</p>
+    </figcaption>
 </figure>
-</p>
+
 <p>Using the structure at <a href="https://github.com/rafaelbroseghini/homelab/k8s">homelab/k8s</a> allows me to manage a lightweight k3s cluster in my Raspberry Pi 5 with almost no manual intervention needed!</p>
 <p>Feel free to clone the repo and play with it! :)</p>
 
