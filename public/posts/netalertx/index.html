@@ -60,7 +60,7 @@
 
 
 
-<link rel="stylesheet" href="/assets/combined.min.56b1873d8852f8a5a109abda36c1bfcde55cb48e5bcbe0d8c934a196a7dc374a.css" media="all">
+<link rel="stylesheet" href="/assets/combined.min.c331fb2e28e3424112942e1a97d26217094a70be37369266be1a3f3d6bfc1861.css" media="all">
 
 
 
@@ -198,15 +198,18 @@
   Installation
   <a class="anchor" href="#installation">#</a>
 </h2>
-<div class="highlight"><pre tabindex="0" style="color:#c6d0f5;background-color:#303446;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker run -d --rm --network<span style="color:#99d1db;font-weight:bold">=</span>host <span style="color:#8caaee">\
-</span></span></span><span style="display:flex;"><span><span style="color:#8caaee"></span>  -v local_path/config:/app/config <span style="color:#8caaee">\
-</span></span></span><span style="display:flex;"><span><span style="color:#8caaee"></span>  -v local_path/db:/app/db <span style="color:#8caaee">\
-</span></span></span><span style="display:flex;"><span><span style="color:#8caaee"></span>  --mount <span style="color:#f2d5cf">type</span><span style="color:#99d1db;font-weight:bold">=</span>tmpfs,target<span style="color:#99d1db;font-weight:bold">=</span>/app/api <span style="color:#8caaee">\
-</span></span></span><span style="display:flex;"><span><span style="color:#8caaee"></span>  -e <span style="color:#f2d5cf">PUID</span><span style="color:#99d1db;font-weight:bold">=</span><span style="color:#ef9f76">200</span> -e <span style="color:#f2d5cf">PGID</span><span style="color:#99d1db;font-weight:bold">=</span><span style="color:#ef9f76">300</span> <span style="color:#8caaee">\
-</span></span></span><span style="display:flex;"><span><span style="color:#8caaee"></span>  -e <span style="color:#f2d5cf">TZ</span><span style="color:#99d1db;font-weight:bold">=</span>America/Chicago <span style="color:#8caaee">\
-</span></span></span><span style="display:flex;"><span><span style="color:#8caaee"></span>  -e <span style="color:#f2d5cf">PORT</span><span style="color:#99d1db;font-weight:bold">=</span><span style="color:#ef9f76">20211</span> <span style="color:#8caaee">\
-</span></span></span><span style="display:flex;"><span><span style="color:#8caaee"></span>  ghcr.io/jokob-sk/netalertx:latest
-</span></span></code></pre></div><p>I did need to set the correct network interface in the UI and after a few minutes I was able to see the LAN topology!</p>
+<div class="code-block">
+  <div class="highlight"><pre tabindex="0" style="color:#c6d0f5;background-color:#303446;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker run -d --rm --network<span style="color:#99d1db;font-weight:bold">=</span>host <span style="color:#8caaee">\
+</span></span></span><span style="display:flex;"><span>  -v local_path/config:/app/config <span style="color:#8caaee">\
+</span></span></span><span style="display:flex;"><span>  -v local_path/db:/app/db <span style="color:#8caaee">\
+</span></span></span><span style="display:flex;"><span>  --mount <span style="color:#f2d5cf">type</span><span style="color:#99d1db;font-weight:bold">=</span>tmpfs,target<span style="color:#99d1db;font-weight:bold">=</span>/app/api <span style="color:#8caaee">\
+</span></span></span><span style="display:flex;"><span>  -e <span style="color:#f2d5cf">PUID</span><span style="color:#99d1db;font-weight:bold">=</span><span style="color:#ef9f76">200</span> -e <span style="color:#f2d5cf">PGID</span><span style="color:#99d1db;font-weight:bold">=</span><span style="color:#ef9f76">300</span> <span style="color:#8caaee">\
+</span></span></span><span style="display:flex;"><span>  -e <span style="color:#f2d5cf">TZ</span><span style="color:#99d1db;font-weight:bold">=</span>America/Chicago <span style="color:#8caaee">\
+</span></span></span><span style="display:flex;"><span>  -e <span style="color:#f2d5cf">PORT</span><span style="color:#99d1db;font-weight:bold">=</span><span style="color:#ef9f76">20211</span> <span style="color:#8caaee">\
+</span></span></span><span style="display:flex;"><span>  ghcr.io/jokob-sk/netalertx:latest</span></span></code></pre></div>
+  <button class="copy-code-button">copy</button>
+</div>
+<p>I did need to set the correct network interface in the UI and after a few minutes I was able to see the LAN topology!</p>
 <p>
 
 
@@ -221,9 +224,8 @@
 
 <figure class="">
 
-    <div class="img-container" >
-        <img loading="lazy" alt="Netalertx" src="../../img/netalert.png" >
-    </div>
+    
+    
 
     
     <div class="caption-container">
