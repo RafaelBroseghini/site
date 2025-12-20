@@ -4,7 +4,7 @@ title = 'git & ntfy'
 summary = 'Tracking third-party content changes with git scraping and ntfy.sh'
 readTime = true
 math = true
-tags = ["self-hosted"]
+tags = ["homelab"]
 showTags = true
 hideBackToTop = false
 +++
