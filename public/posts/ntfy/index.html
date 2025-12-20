@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+<link rel="icon" type="image/ico" href="https://rafaelbroseghini.com/favicon/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://rafaelbroseghini.com/favicon/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://rafaelbroseghini.com/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="https://rafaelbroseghini.com/favicon/android-chrome-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://rafaelbroseghini.com/favicon/apple-touch-icon.png">
+
+<meta name="description" content=""/>
+
+
+
+<title>
+    
+    git &amp; ntfy | rafaelbroseghini.com
+    
+</title>
+
+<link rel="canonical" href="https://rafaelbroseghini.com/posts/ntfy/"/>
+
+<meta property="og:url" content="https://rafaelbroseghini.com/posts/ntfy/">
+  <meta property="og:site_name" content="rafaelbroseghini.com">
+  <meta property="og:title" content="git &amp; ntfy">
+  <meta property="og:description" content="Tracking third-party content changes with git scraping and ntfy.sh">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-12-20T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-12-20T00:00:00+00:00">
+    <meta property="article:tag" content="Self-Hosted">
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.c331fb2e28e3424112942e1a97d26217094a70be37369266be1a3f3d6bfc1861.css" media="all">
+
+
+
+
+
+
+<script
+  async
+  defer
+  data-website-id="9b9456bb-75e9-43da-9e93-44d014bd324f"
+  src="https://cloud.umami.is/script.js"
+></script>
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+
+    
+
+    <h1 class="header-title">
+        <a href="https://rafaelbroseghini.com/">rafaelbroseghini.com</a>
+    </h1>
+
+    <div class="header-menu">
+        
+
+        
+        
+
+        <p
+            class="small ">
+            <a href="/" >
+                /home
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/posts" >
+                /posts
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/about" >
+                /about
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/tags" >
+                /tags
+            </a>
+        </p>
+        
+        
+    </div>
+
+    
+
+</div>
+
+    </header>
+
+    <main class="main">
+      
+
+
+
+
+<div class="breadcrumbs"><a href="/">Home</a><span class="breadcrumbs-separator">/</span><a href="/posts/">Posts</a><span class="breadcrumbs-separator">/</span>
+        <a href="/posts/ntfy/">git &amp; ntfy</a></div>
+
+
+<div >
+  <article>
+    <header class="single-intro-container">
+        
+        <h1 class="single-title">git &amp; ntfy</h1>
+        <p class="single-summary">Tracking third-party content changes with git scraping and ntfy.sh</p>
+        
+        <div class="single-subsummary">
+          
+          <div>
+            
+            <p class="single-date">
+              <time datetime="2025-12-20T00:00:00&#43;00:00">December 20, 2025</time>
+              &nbsp; · &nbsp;3 min read
+            </p>
+          </div>
+        </div>
+        
+    </header>    
+        <div class="single-tags"><span>
+                  <a href="https://rafaelbroseghini.com/tags/self-hosted/">#Self-Hosted</a>
+                </span>
+        </div>
+    
+    <div class="single-content">
+      <h1 class="heading" id="scrape--notify">
+  Scrape &amp; Notify
+  <a class="anchor" href="#scrape--notify">#</a>
+</h1>
+<p>Tracking third-party content changes is one of those problems that seems simple until you actually try to do it. Sure, there are fancy tools that&rsquo;ll snapshot static pages and alert you on diffs, or monitor REST API responses with scheduled cron jobs, but when you&rsquo;re dealing with datasets that don&rsquo;t have change tracking built in, you&rsquo;re stuck manually comparing files or writing your own diff tooling.</p>
+<p>For this mini project, I had three goals: track changes to the content I was interested in, self-host a notifications tool, and keep it all free.</p>
+<h3 class="heading" id="git-tracking">
+  Git tracking
+  <a class="anchor" href="#git-tracking">#</a>
+</h3>
+<p>I stumbled across <a href="https://simonwillison.net/2020/Oct/9/git-scraping/">Simon Willison&rsquo;s post on git scraping</a> while wrestling with a problem that felt like it should be simpler than it was. I&rsquo;d built a tool that synced content to a third-party data store. The logic was straightforward: hash incoming content, compare against the last uploaded hash, and only overwrite if something changed. Simple, right?</p>
+<p>Except the provider didn&rsquo;t give me a way to retrieve the previously uploaded hash. So I needed somewhere to stash that state. <a href="https://aws.amazon.com/s3/">S3</a>? <a href="https://www.postgresql.org/">Postgres</a>? <a href="https://redis.io/">Redis</a>? <a href="https://supabase.com/">Supabase</a>? <a href="https://kubernetes.io/">Kubernetes</a> CLUSTER?! (jk) Just write it to disk? All perfectly valid options, but remember, I wanted to keep this project free and not introduce a service I&rsquo;d only use for this exploration.</p>
+<p>Simon&rsquo;s post does a great job explaining the git scraping pattern. You commit changes to a repo, and you have a complete change history with git&rsquo;s diff capabilities. No extra infrastructure, no additional moving parts. It&rsquo;s elegant.</p>
+<h3 class="heading" id="ntfysh">
+  ntfy.sh
+  <a class="anchor" href="#ntfysh">#</a>
+</h3>
+<p>Git solved the tracking problem, but I wanted to know <em>when</em> and <em>what</em> changed without manually checking the repo. GitHub&rsquo;s watch feature works at the repository level, which is too broad.</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    
+    
+
+    
+    <div class="caption-container">
+        <figcaption> GitHub Watch </figcaption>
+    </div>
+    
+</figure>
+</p>
+<p>I actually ended up turning off most notifications in GitHub because I was getting so much stuff.</p>
+<p>I found <a href="https://app.github-file-watcher.com/">github-file-watcher.com</a> which does exactly what I wanted -&gt; watches specific files in public repos, but I&rsquo;m working with a private repository, so that was a dead end.</p>
+<p>What I really wanted was this: ping me with the exact payload diff whenever tracked content changed.</p>
+<p>While scrolling through <a href="https://www.reddit.com/r/selfhosted/">r/selfhosted</a> one night, I came across <a href="https://ntfy.sh/">ntfy.sh</a>, a notification service that looked pretty straightforward and could be self-hosted. Perfect excuse to give it a try.</p>
+<h2 class="heading" id="pulling-it-all-together">
+  Pulling it all together
+  <a class="anchor" href="#pulling-it-all-together">#</a>
+</h2>
+<p>After installing <code>ntfy.sh</code> and wiring it up to my ingress, I set up a GitHub Actions workflow that fetches the latest payload, compares it against the previous version stored in the repo, and sends me a notification if anything changed.</p>
+<div class="code-block">
+  <div class="highlight"><pre tabindex="0" style="color:#c6d0f5;background-color:#303446;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ca9ee6">name</span>: Scrape latest data
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ca9ee6">on</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ca9ee6">push</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ca9ee6">workflow_dispatch</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ca9ee6">schedule</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ca9ee6">cron</span>:  <span style="color:#a6d189">&#39;0 1,3,6,12,18 * * *&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ca9ee6">jobs</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ca9ee6">scheduled</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ca9ee6">runs-on</span>: ubuntu-latest
+</span></span><span style="display:flex;"><span>    <span style="color:#ca9ee6">steps</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ca9ee6">name</span>: Check out repository
+</span></span><span style="display:flex;"><span>      <span style="color:#ca9ee6">uses</span>: actions/checkout@v4
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>    - <span style="color:#ca9ee6">name</span>: Fetch latest payload
+</span></span><span style="display:flex;"><span>      <span style="color:#ca9ee6">run</span>: |<span style="color:#737994">
+</span></span></span><span style="display:flex;"><span><span style="color:#737994">        curl -o new.json https://&lt;sample-url&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#737994">        </span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ca9ee6">name</span>: Check for changes
+</span></span><span style="display:flex;"><span>      <span style="color:#ca9ee6">id</span>: check
+</span></span><span style="display:flex;"><span>      <span style="color:#ca9ee6">run</span>: |<span style="color:#737994">
+</span></span></span><span style="display:flex;"><span><span style="color:#737994">        if [ -f old.json ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#737994">          OLD_SHA=$(sha256sum old.json | cut -d&#39; &#39; -f1)
+</span></span></span><span style="display:flex;"><span><span style="color:#737994">          NEW_SHA=$(sha256sum new.json | cut -d&#39; &#39; -f1)
+</span></span></span><span style="display:flex;"><span><span style="color:#737994">          if [ &#34;$OLD_SHA&#34; != &#34;$NEW_SHA&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#737994">            echo &#34;changed=true&#34; &gt;&gt; $GITHUB_OUTPUT
+</span></span></span><span style="display:flex;"><span><span style="color:#737994">          else
+</span></span></span><span style="display:flex;"><span><span style="color:#737994">            echo &#34;changed=false&#34; &gt;&gt; $GITHUB_OUTPUT
+</span></span></span><span style="display:flex;"><span><span style="color:#737994">          fi
+</span></span></span><span style="display:flex;"><span><span style="color:#737994">        else
+</span></span></span><span style="display:flex;"><span><span style="color:#737994">          echo &#34;changed=true&#34; &gt;&gt; $GITHUB_OUTPUT
+</span></span></span><span style="display:flex;"><span><span style="color:#737994">        fi
+</span></span></span><span style="display:flex;"><span><span style="color:#737994">        </span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ca9ee6">name</span>: Send notification if changed
+</span></span><span style="display:flex;"><span>      <span style="color:#ca9ee6">if</span>: steps.check.outputs.changed == &#39;true&#39;
+</span></span><span style="display:flex;"><span>      <span style="color:#ca9ee6">run</span>: |<span style="color:#737994">
+</span></span></span><span style="display:flex;"><span><span style="color:#737994">        DIFF=$(diff -u old.json new.json || true)
+</span></span></span><span style="display:flex;"><span><span style="color:#737994">        curl -H &#34;Markdown: yes&#34; \
+</span></span></span><span style="display:flex;"><span><span style="color:#737994">             -d $&#39;```diff\n&#39;&#34;$DIFF&#34;$&#39;\n```&#39; \
+</span></span></span><span style="display:flex;"><span><span style="color:#737994">             https://&lt;self-hosted-url&gt;/&lt;topic&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#737994">             </span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ca9ee6">name</span>: Commit and push changes
+</span></span><span style="display:flex;"><span>      <span style="color:#ca9ee6">if</span>: steps.check.outputs.changed == &#39;true&#39;
+</span></span><span style="display:flex;"><span>      <span style="color:#ca9ee6">run</span>: |<span style="color:#737994">
+</span></span></span><span style="display:flex;"><span><span style="color:#737994">        git config user.name &#34;Automated&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#737994">        git config user.email &#34;actions@users.noreply.github.com&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#737994">        mv new.json old.json
+</span></span></span><span style="display:flex;"><span><span style="color:#737994">        git add old.json
+</span></span></span><span style="display:flex;"><span><span style="color:#737994">        timestamp=$(date -u)
+</span></span></span><span style="display:flex;"><span><span style="color:#737994">        git commit -m &#34;Update data: ${timestamp}&#34; || exit 0
+</span></span></span><span style="display:flex;"><span><span style="color:#737994">        git push</span></span></span></code></pre></div>
+  <button class="copy-code-button">copy</button>
+</div>
+<p>Pretty cool! now whenever there are any changes to the content I&rsquo;m watching, I get a push notification and can see the markdown diff right in the notification event history:</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    
+    
+
+    
+    <div class="caption-container">
+        <figcaption> Notifications History </figcaption>
+    </div>
+    
+</figure>
+</p>
+<p><strong>Mission accomplished: Git Scraping, Free, Self-hosted.</strong></p>
+
+    </div>
+  </article>
+
+  
+
+  
+
+  
+  
+
+<div class="single-pagination">
+    <hr />
+
+    <div class="flexnowrap">
+
+        <div class="single-pagination-prev">
+            
+            <div class="single-pagination-container-prev">
+                <div class="single-pagination-text">←</div>
+                <div class="single-pagination-text">
+                    <a href="/posts/op-viper/">
+                        1Password and Go Configuration
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="single-pagination-next">
+            
+        </div>
+
+    </div>
+
+    <hr />
+</div>
+
+
+
+  
+
+  
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+    </main>
+  </div>
+
+  
+  
+
+
+
+
+
+    
+
+
+
+
+  <footer>
+    
+
+
+  </footer>
+
+  
+  <link rel="stylesheet" 
+  href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css">
+  
+<script defer 
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+
+<script defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body);"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "$", right: "$", display: false }
+      ]
+    });
+  });
+</script>
+  
+</body>
+
+<script src="/js/theme-switch.js"></script>
+<script defer src="/js/copy-code.js"></script>
+</html>

@@ -6,8 +6,15 @@
     <description>Recent content in Tags on rafaelbroseghini.com</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 25 Sep 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 20 Dec 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://rafaelbroseghini.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Self-Hosted</title>
+      <link>https://rafaelbroseghini.com/tags/self-hosted/</link>
+      <pubDate>Sat, 20 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>https://rafaelbroseghini.com/tags/self-hosted/</guid>
+      <description></description>
+    </item>
     <item>
       <title>1Password</title>
       <link>https://rafaelbroseghini.com/tags/1password/</link>

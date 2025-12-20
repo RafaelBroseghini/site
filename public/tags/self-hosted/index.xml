@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Self-Hosted on rafaelbroseghini.com</title>
+    <link>https://rafaelbroseghini.com/tags/self-hosted/</link>
+    <description>Recent content in Self-Hosted on rafaelbroseghini.com</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 20 Dec 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://rafaelbroseghini.com/tags/self-hosted/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>git &amp; ntfy</title>
+      <link>https://rafaelbroseghini.com/posts/ntfy/</link>
+      <pubDate>Sat, 20 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>https://rafaelbroseghini.com/posts/ntfy/</guid>
+      <description>Tracking third-party content changes with git scraping and ntfy.sh</description>
+    </item>
+  </channel>
+</rss>

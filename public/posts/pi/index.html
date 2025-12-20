@@ -60,7 +60,7 @@
 
 
 
-<link rel="stylesheet" href="/assets/combined.min.56b1873d8852f8a5a109abda36c1bfcde55cb48e5bcbe0d8c934a196a7dc374a.css" media="all">
+<link rel="stylesheet" href="/assets/combined.min.c331fb2e28e3424112942e1a97d26217094a70be37369266be1a3f3d6bfc1861.css" media="all">
 
 
 
@@ -197,7 +197,8 @@
   <a class="anchor" href="#introduction">#</a>
 </h1>
 <blockquote>
-<p>You can find all of the manifests for my k8s setup at my <a href="https://github.com/rafaelbroseghini/homelab">homelab</a> GitHub repository.</p></blockquote>
+<p>You can find all of the manifests for my k8s setup at my <a href="https://github.com/rafaelbroseghini/homelab">homelab</a> GitHub repository.</p>
+</blockquote>
 <p>Over the past few weeks I have been playing around with my RaspberryPi 5 to host a <code>k3s</code> cluster, a Certificate Authority, some microservices and to learn physical computing.</p>
 <p>It&rsquo;s been going pretty well, but I wanted to minimize the amount of manual intervention needed from me to deploy and debug services running in my <code>k3s</code> cluster. Since I have had experience with ArgoCD, I knew it was a good tool for the job!</p>
 <p>The ultimate goal is to get the cluster up and running on my Raspberry Pi and be able to <strong>securely</strong> access it not only from my home network but also <strong>anywhere in the world</strong> (thanks to <a href="https://tailscale.com">Tailscale</a>! - more on it on another post).</p>
@@ -218,9 +219,8 @@
 
 <figure class=" img-small">
 
-    <div class="img-container" >
-        <img loading="lazy" alt="pi" src="../../img/raspi.jpeg#small" >
-    </div>
+    
+    
 
     
     <div class="caption-container">
@@ -237,9 +237,15 @@
 <p>My Raspberry Pi kubernetes cluster runs on a k3s distribution, which is packaged as a single &lt;70MB binary. Perfect for my use case!</p>
 <p><a href="https://docs.k3s.io/quick-start#install-script">Following the docs</a>, to get a <code>k3s</code> cluster up and running on my 1 node RaspberryPi cluster all I need to do is run:</p>
 <p>Add <code>cgroup_memory=1 cgroup_enable=memory</code> to the end of <code>/boot/firmware/cmdline.txt</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#c6d0f5;background-color:#303446;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo reboot
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#c6d0f5;background-color:#303446;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -sfL https://get.k3s.io | sh -
-</span></span></code></pre></div><h2 class="heading" id="argocd">
+<div class="code-block">
+  <div class="highlight"><pre tabindex="0" style="color:#c6d0f5;background-color:#303446;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo reboot</span></span></code></pre></div>
+  <button class="copy-code-button">copy</button>
+</div>
+<div class="code-block">
+  <div class="highlight"><pre tabindex="0" style="color:#c6d0f5;background-color:#303446;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -sfL https://get.k3s.io | sh -</span></span></code></pre></div>
+  <button class="copy-code-button">copy</button>
+</div>
+<h2 class="heading" id="argocd">
   ArgoCD
   <a class="anchor" href="#argocd">#</a>
 </h2>
@@ -249,14 +255,20 @@
   <a class="anchor" href="#how-i-bootstrap-argocd">#</a>
 </h3>
 <p>I personally pick the version of ArgoCD I want to deploy on my cluster and run:</p>
-<div class="highlight"><pre tabindex="0" style="color:#c6d0f5;background-color:#303446;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl create namespace argocd
-</span></span><span style="display:flex;"><span>kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/&lt;VERSION&gt;/manifests/install.yaml
-</span></span></code></pre></div><p>This installs a non-HA version of Argo, which is ok for my homelab setup.</p>
+<div class="code-block">
+  <div class="highlight"><pre tabindex="0" style="color:#c6d0f5;background-color:#303446;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl create namespace argocd
+</span></span><span style="display:flex;"><span>kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/&lt;VERSION&gt;/manifests/install.yaml</span></span></code></pre></div>
+  <button class="copy-code-button">copy</button>
+</div>
+<p>This installs a non-HA version of Argo, which is ok for my homelab setup.</p>
 <p>Once I get Argo running in the cluster and the pods come up and healthy, I log into the UI with the initial admin login and make sure it&rsquo;s properly responding:</p>
-<div class="highlight"><pre tabindex="0" style="color:#c6d0f5;background-color:#303446;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>argocd login --core
+<div class="code-block">
+  <div class="highlight"><pre tabindex="0" style="color:#c6d0f5;background-color:#303446;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>argocd login --core
 </span></span><span style="display:flex;"><span>argocd admin initial-password <span style="color:#737994;font-style:italic"># copy the password</span>
-</span></span><span style="display:flex;"><span>argocd admin dashboard <span style="color:#737994;font-style:italic"># username: admin / password copied from above</span>
-</span></span></code></pre></div><h3 class="heading" id="managing-applications">
+</span></span><span style="display:flex;"><span>argocd admin dashboard <span style="color:#737994;font-style:italic"># username: admin / password copied from above</span></span></span></code></pre></div>
+  <button class="copy-code-button">copy</button>
+</div>
+<h3 class="heading" id="managing-applications">
   Managing Applications
   <a class="anchor" href="#managing-applications">#</a>
 </h3>
@@ -273,7 +285,8 @@
   Root Application
   <a class="anchor" href="#root-application">#</a>
 </h5>
-<div class="highlight"><pre tabindex="0" style="color:#c6d0f5;background-color:#303446;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ca9ee6">apiVersion</span>: argoproj.io/v1alpha1
+<div class="code-block">
+  <div class="highlight"><pre tabindex="0" style="color:#c6d0f5;background-color:#303446;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ca9ee6">apiVersion</span>: argoproj.io/v1alpha1
 </span></span><span style="display:flex;"><span><span style="color:#ca9ee6">kind</span>: Application
 </span></span><span style="display:flex;"><span><span style="color:#ca9ee6">metadata</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#ca9ee6">finalizers</span>:
@@ -292,15 +305,21 @@
 </span></span><span style="display:flex;"><span>  <span style="color:#ca9ee6">syncPolicy</span>:
 </span></span><span style="display:flex;"><span>    <span style="color:#ca9ee6">automated</span>:
 </span></span><span style="display:flex;"><span>      <span style="color:#ca9ee6">prune</span>: <span style="color:#ef9f76">true</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#ca9ee6">selfHeal</span>: <span style="color:#ef9f76">true</span>
-</span></span></code></pre></div><p>We need to manually bootstrap the root application once and only once:</p>
-<div class="highlight"><pre tabindex="0" style="color:#c6d0f5;background-color:#303446;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl apply -f k8s/root.yaml
-</span></span></code></pre></div><h5 class="heading" id="managing-applications-1">
+</span></span><span style="display:flex;"><span>      <span style="color:#ca9ee6">selfHeal</span>: <span style="color:#ef9f76">true</span></span></span></code></pre></div>
+  <button class="copy-code-button">copy</button>
+</div>
+<p>We need to manually bootstrap the root application once and only once:</p>
+<div class="code-block">
+  <div class="highlight"><pre tabindex="0" style="color:#c6d0f5;background-color:#303446;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl apply -f k8s/root.yaml</span></span></code></pre></div>
+  <button class="copy-code-button">copy</button>
+</div>
+<h5 class="heading" id="managing-applications-1">
   Managing Applications
   <a class="anchor" href="#managing-applications-1">#</a>
 </h5>
 <p>Now that our root app is applied, it will start to apply its child resources immediatelly. Below is the <code>argocd</code> application that will get applied. That&rsquo;s the power of ArgoCD! ArgoCD managing ArgoCD itself.</p>
-<div class="highlight"><pre tabindex="0" style="color:#c6d0f5;background-color:#303446;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ca9ee6">apiVersion</span>: argoproj.io/v1alpha1
+<div class="code-block">
+  <div class="highlight"><pre tabindex="0" style="color:#c6d0f5;background-color:#303446;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ca9ee6">apiVersion</span>: argoproj.io/v1alpha1
 </span></span><span style="display:flex;"><span><span style="color:#ca9ee6">kind</span>: Application
 </span></span><span style="display:flex;"><span><span style="color:#ca9ee6">metadata</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#ca9ee6">finalizers</span>:
@@ -319,8 +338,10 @@
 </span></span><span style="display:flex;"><span>  <span style="color:#ca9ee6">syncPolicy</span>:
 </span></span><span style="display:flex;"><span>    <span style="color:#ca9ee6">automated</span>:
 </span></span><span style="display:flex;"><span>      <span style="color:#ca9ee6">prune</span>: <span style="color:#ef9f76">true</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#ca9ee6">selfHeal</span>: <span style="color:#ef9f76">true</span>
-</span></span></code></pre></div><p>I hope you can see how this process would repeat for any application(s) that you wish to deploy in your cluster.</p>
+</span></span><span style="display:flex;"><span>      <span style="color:#ca9ee6">selfHeal</span>: <span style="color:#ef9f76">true</span></span></span></code></pre></div>
+  <button class="copy-code-button">copy</button>
+</div>
+<p>I hope you can see how this process would repeat for any application(s) that you wish to deploy in your cluster.</p>
 <p>We would add the <code>Application</code> yaml under the correct path in the <code>apps</code> folder and the <code>root</code> application will take care of <a href="https://argo-cd.readthedocs.io/en/stable/user-guide/auto_sync/">auto syncing</a> it for us!</p>
 <p>Now head over to the ArgoCD UI <code>/argocd</code> path, and hard refresh your <code>root</code> application. You should see the <code>argocd</code> application show up and auto sync.</p>
 <p>
@@ -337,9 +358,8 @@
 
 <figure class="">
 
-    <div class="img-container" >
-        <img loading="lazy" alt="argocd" src="../../img/argo.png" >
-    </div>
+    
+    
 
     
     <div class="caption-container">
