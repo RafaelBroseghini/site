@@ -212,33 +212,12 @@
 </h1>
 <p><code>Magic DNS</code> is a feature of Tailscale that automatically registers names for devices on the tailnet. For example: when I installed Tailscale on my Raspberry Pi 5, I gave it the name <code>pi</code>. When I connect to my tailnet, I can now access the Raspberry Pi reverse proxy or SSH using the names <code>pi</code>, <code>pi.xxx.ts.net</code>, a IPv6 address, and a IPv4 address.</p>
 <p>A few weeks ago I was in New York City and wanted to check on <a href="https://docs.pi-hole.net/">PiHole</a>. It was as simple as going to <code>pi:8880</code> (it&rsquo;s ok, no one else is on my tailnet) and being able to access the PiHole dashboard.</p>
-<p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<figure class=" img-small">
-
-    
-    
-
-    
-    <div class="caption-container">
-        <figcaption> PiHole Dashboard </figcaption>
-    </div>
-    
+<figure><img src="/img/pihole.jpeg"
+    alt="PiHole Dashboard"><figcaption>
+      <p>PiHole Dashboard</p>
+    </figcaption>
 </figure>
-</p>
+
 <h1 class="heading" id="tailscale-funnels">
   Tailscale Funnels
   <a class="anchor" href="#tailscale-funnels">#</a>
@@ -246,33 +225,12 @@
 <p>Last week I was playing with my new <a href="https://www.raspberrypi.com/products/camera-module-3/">camera module V3</a> on my <code>pi</code> to spin up a small web FFmpeg server and stream content. I wanted to show my mom what I had come up with, but the problem is: my parents live abroad and unless they were part of my tailnet, there was no way I could quickly share a live stream with them running on my Raspberry Pi. I also wanted to do this via HTTPS and not need to create special ACLs to allow access to the port.</p>
 <p>But wait! Tailscale also solves that problem with a feature called <code>Tailscale Funnels</code>. If you&rsquo;re familiar with cloudflare tunnels, this is pretty much the same idea. You run the command <code>tailscale funnel &lt;port&gt;</code> and Tailscale creates a tunnel with IP routes from your machine up to the Tailscale servers which lets you route traffic from the broader internet to a local service running on a device in your tailnet.</p>
 <p>At this point, anyone in the world can access the content running on my Raspberry Pi. Pretty cool, right? With that being said, use it responsibly as it is legitimately exposing your machine to the public internet.</p>
-<p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<figure class=" img-small">
-
-    
-    
-
-    
-    <div class="caption-container">
-        <figcaption> Official Tailscale Docs - Funnel </figcaption>
-    </div>
-    
+<figure><img src="/img/funnel.jpeg"
+    alt="Official Tailscale Docs - Funnel"><figcaption>
+      <p>Official Tailscale Docs - Funnel</p>
+    </figcaption>
 </figure>
-</p>
+
 <p>The <a href="https://tailscale.com/kb/1223/funnel#how-funnel-works">official docs</a> explains how it works in great detail.</p>
 <h1 class="heading" id="whats-next">
   What&rsquo;s next?
