@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+<link rel="icon" type="image/ico" href="https://rafaelbroseghini.com/favicon/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://rafaelbroseghini.com/favicon/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://rafaelbroseghini.com/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="https://rafaelbroseghini.com/favicon/android-chrome-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://rafaelbroseghini.com/favicon/apple-touch-icon.png">
+
+<meta name="description" content=""/>
+
+
+
+<title>
+    
+    Homelab - Part 2 - High Availability &#43; Grafana &amp; Prometheus | rafaelbroseghini.com
+    
+</title>
+
+<link rel="canonical" href="https://rafaelbroseghini.com/posts/ha-grafana-prometheus/"/>
+
+<meta property="og:url" content="https://rafaelbroseghini.com/posts/ha-grafana-prometheus/">
+  <meta property="og:site_name" content="rafaelbroseghini.com">
+  <meta property="og:title" content="Homelab - Part 2 - High Availability &#43; Grafana &amp; Prometheus">
+  <meta property="og:description" content="HA &#43; metrics &amp; dashboards">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-01-04T17:56:11-06:00">
+    <meta property="article:modified_time" content="2026-01-04T17:56:11-06:00">
+    <meta property="article:tag" content="Homelab">
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.c331fb2e28e3424112942e1a97d26217094a70be37369266be1a3f3d6bfc1861.css" media="all">
+
+
+
+
+
+
+<script
+  async
+  defer
+  data-website-id="9b9456bb-75e9-43da-9e93-44d014bd324f"
+  src="https://cloud.umami.is/script.js"
+></script>
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+
+    
+
+    <h1 class="header-title">
+        <a href="https://rafaelbroseghini.com/">rafaelbroseghini.com</a>
+    </h1>
+
+    <div class="header-menu">
+        
+
+        
+        
+
+        <p
+            class="small ">
+            <a href="/" >
+                /home
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/posts" >
+                /posts
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/about" >
+                /about
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/tags" >
+                /tags
+            </a>
+        </p>
+        
+        
+    </div>
+
+    
+
+</div>
+
+    </header>
+
+    <main class="main">
+      
+
+
+
+
+<div class="breadcrumbs"><a href="/">Home</a><span class="breadcrumbs-separator">/</span><a href="/posts/">Posts</a><span class="breadcrumbs-separator">/</span>
+        <a href="/posts/ha-grafana-prometheus/">Homelab - Part 2 - High Availability &#43; Grafana &amp; Prometheus</a></div>
+
+
+<div >
+  <article>
+    <header class="single-intro-container">
+        
+        <h1 class="single-title">Homelab - Part 2 - High Availability &#43; Grafana &amp; Prometheus</h1>
+        <p class="single-summary">HA + metrics &amp; dashboards</p>
+        
+        <div class="single-subsummary">
+          
+          <div>
+            
+            <p class="single-date">
+              <time datetime="2026-01-04T17:56:11-06:00">January 4, 2026</time>
+              &nbsp; · &nbsp;4 min read
+            </p>
+          </div>
+        </div>
+        
+    </header>    
+        <div class="single-tags"><span>
+                  <a href="https://rafaelbroseghini.com/tags/homelab/">#Homelab</a>
+                </span>
+        </div>
+    
+    <div class="single-content">
+      <p>Over the holidays I spent a good amount of time working on my single-node homelab (Raspberry Pi 5). The goal was to get Prometheus &amp; Grafana up and running in the cluster with a subset of dashboards to capture overall cluster state. For that, I chose to go with <a href="https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack">kube-prometheus-stack</a> and installation was straightforward.</p>
+<p>Despite the straightforward setup, I started seeing an issue where k3s was consuming all of the CPU, throttling all other processes, going into temperature exhaustion throttling, and infinitely restarting the Raspberry Pi.</p>
+<p>This was frustrating because I didn&rsquo;t have a good way to interrupt the process other than SSHing into the machine during the exact 30-60 second window where CPU wasn&rsquo;t maxing out and killing the systemd service. It took me about 30-45 minutes to observe what was happening, inspect logs, research the k3s GitHub repo, SSH at the right time window, and kill the process.</p>
+<p>The culprit was k3s using SQLite out of the box for cluster persistence. The fix? <strong>Switching to etcd</strong> <a href="https://github.com/k3s-io/k3s/discussions/11251#discussioncomment-11183131">#11251</a>.</p>
+<p>Running k3s with <code>--cluster-init</code> switches to etcd. This made the Pi go from 80-100% CPU usage to 5-20%:</p>
+<div class="code-block">
+  <div class="highlight"><pre tabindex="0" style="color:#c6d0f5;background-color:#303446;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>k3s server --cluster-init</span></span></code></pre></div>
+  <button class="copy-code-button">copy</button>
+</div>
+<p>Once that was out of the way and the problem fixed a few things I already knew came back to haunt my homelab:</p>
+<ol>
+<li>
+<p>Yes, it&rsquo;s a single node cluster. If the node fails, I&rsquo;m out of luck.</p>
+</li>
+<li>
+<p>I eventually want to get into hosting a NAS server, Proxmox, etc., and a single Raspberry Pi is not going to cut it.</p>
+</li>
+</ol>
+<h1 class="heading" id="vps-hosting">
+  VPS Hosting
+  <a class="anchor" href="#vps-hosting">#</a>
+</h1>
+<p>My first reaction was to shop online and extend my tailnet with a Virtual Private Server.</p>
+<p>There are tons of VPS providers out there, and luckily I had starred a GitHub repo dedicated to crowdsourcing that information: <a href="https://github.com/cloudcommunity/Cloud-Free-Tier-Comparison">Cloud Free Tier Comparison</a>.</p>
+<p>Logically, I wanted this to be free of charge, so I did end up signing up for the Oracle free tier but cancelled within the first two hours since any of the &ldquo;free tier available&rdquo; zones were out of capacity. It&rsquo;s what they say: &ldquo;If it&rsquo;s free, you&rsquo;re the product.&rdquo;</p>
+<p>After that, I set myself a $5-8/month budget and ended up getting a Hetzner server. Setup was straightforward. Installing Tailscale and k3s-agent was a breeze, and in less than 5 minutes I had another node in my cluster.</p>
+<figure><img src="/img/hetzner.png"
+    alt="Hetzner">
+</figure>
+
+<p>But after a little bit of toying with it, the VPS didn&rsquo;t cut it for me either. I simply want to have full control of the server. So I did bump up the budget a little bit :) and went shopping for a physical machine.</p>
+<h1 class="heading" id="purchasing-another-server">
+  Purchasing Another Server
+  <a class="anchor" href="#purchasing-another-server">#</a>
+</h1>
+<p>So then I went researching for an additional server: <a href="https://www.reddit.com/r/homelab/">r/homelab</a>, <a href="https://www.reddit.com/r/selfhosted/">r/selfhosted</a>, <a href="https://www.reddit.com/r/minilab/">r/minilab</a>, Amazon, Newegg, eBay, Discord, etc.</p>
+<p>After a couple of hours I chose the: <a href="https://www.ebay.com/itm/326784734282">HP EliteDesk 800 G2 Mini 35W Desktop i5-6500T@2.5GHz 16G DDR4 256G SSD WiFi</a> for $99.</p>
+<figure><img src="/img/server.png"
+    alt="HP EliteDesk 800">
+</figure>
+
+<p>Sure it&rsquo;s a little bit dated, but good enough as an additional server for my homelab. I also have never owned a mini PC, and thought they looked pretty cool!</p>
+<h1 class="heading" id="how-about-the-pi">
+  How about the Pi?
+  <a class="anchor" href="#how-about-the-pi">#</a>
+</h1>
+<p>The Raspberry Pi will still be part of the homelab hosting a subset of the k8s services but starting this 2026 I&rsquo;ll finally get into GPIOs and hardware automation. I&rsquo;ve purchased a breadboard kit and plan on playing around with sensors, lights and <a href="https://www.home-assistant.io/">Home Assistant</a>.</p>
+<h1 class="heading" id="grafana--prometheus-finally">
+  Grafana + Prometheus (Finally)
+  <a class="anchor" href="#grafana--prometheus-finally">#</a>
+</h1>
+<p>I did end up getting Grafana &amp; Prometheus working and surfacing metrics for a lot of my most important services as well as cluster/node stats.</p>
+<p>One thing that was quite annoying was the fact that hard refreshes in ArgoCD caused the Grafana admin password to change because of the <code>lookup</code> Helm function, which caused the Grafana deployment to do a rolling restart since the secret checksum changed. Issue <a href="https://github.com/argoproj/argo-cd/issues/5202">#5202</a> summarizes the problem well.</p>
+<p>I ended up just ignoring differences to the secret in question:</p>
+<div class="code-block">
+  <div class="highlight"><pre tabindex="0" style="color:#c6d0f5;background-color:#303446;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ca9ee6">ignoreDifferences</span>:
+</span></span><span style="display:flex;"><span>- <span style="color:#ca9ee6">kind</span>: Secret
+</span></span><span style="display:flex;"><span>    <span style="color:#ca9ee6">name</span>: monitoring-grafana
+</span></span><span style="display:flex;"><span>    <span style="color:#ca9ee6">namespace</span>: monitoring
+</span></span><span style="display:flex;"><span>    <span style="color:#ca9ee6">jsonPointers</span>:
+</span></span><span style="display:flex;"><span>    - /data</span></span></code></pre></div>
+  <button class="copy-code-button">copy</button>
+</div>
+<p>Finally, here&rsquo;s one of the pretty dashboards I get to look at now :)</p>
+<figure><img src="/img/node.png"
+    alt="Grafana Monitoring">
+</figure>
+
+<p>Moral of the story: trying to host a new set of services might cause you to end up buying a new server. Cheers!</p>
+
+    </div>
+  </article>
+
+  
+
+  
+
+  
+  
+
+<div class="single-pagination">
+    <hr />
+
+    <div class="flexnowrap">
+
+        <div class="single-pagination-prev">
+            
+            <div class="single-pagination-container-prev">
+                <div class="single-pagination-text">←</div>
+                <div class="single-pagination-text">
+                    <a href="/posts/ntfy/">
+                        git &amp; ntfy
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="single-pagination-next">
+            
+        </div>
+
+    </div>
+
+    <hr />
+</div>
+
+
+
+  
+
+  
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+    </main>
+  </div>
+
+  
+  
+
+
+
+
+
+    
+
+
+
+
+  <footer>
+    
+
+
+  </footer>
+
+  
+  <link rel="stylesheet" 
+  href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css">
+  
+<script defer 
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+
+<script defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body);"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "$", right: "$", display: false }
+      ]
+    });
+  });
+</script>
+  
+</body>
+
+<script src="/js/theme-switch.js"></script>
+<script defer src="/js/copy-code.js"></script>
+</html>
