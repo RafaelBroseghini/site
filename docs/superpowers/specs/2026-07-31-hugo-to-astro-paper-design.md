@@ -54,7 +54,8 @@ Migrate `rafaelbroseghini.com` from Hugo (typo theme) to Astro using the [Astro 
 ### Target layout (Astro Paper)
 
 - `astro-paper.config.ts` — site metadata, socials, features
-- `src/data/blog/<slug>/index.mdx` — posts
+- `src/content/posts/<slug>.mdx` — posts (Astro Paper v6 content collection; not `src/data/blog`)
+- `src/content/pages/about.md` — about page
 - `src/pages/`, `src/components/`, `src/layouts/` — theme
 - `public/img/` — post images
 - `public/` — favicons and other static assets
@@ -76,7 +77,7 @@ Configure via `astro-paper.config.ts`:
 
 ### Posts
 
-Convert each Hugo post → `src/data/blog/<slug>/index.mdx`.
+Convert each Hugo post → `src/content/posts/<slug>.mdx`.
 
 **Frontmatter mapping:**
 
