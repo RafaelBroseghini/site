@@ -4,17 +4,19 @@ export default defineAstroPaperConfig({
   site: {
     url: "https://rafaelbroseghini.com/",
     title: "rafaelbroseghini.com",
-    description: "til",
+    description: "Cloud-native tooling, side projects, and things I'm still trying to figure out.",
     author: "Rafael Broseghini",
     profile: "https://github.com/rafaelbroseghini",
     ogImage: "default-og.jpg",
     lang: "en",
     timezone: "America/Chicago",
     dir: "ltr",
+    blurb:
+      "Hi, I'm Rafa! I write about cloud-native tooling, side projects, and things I'm still trying to figure out.",
   },
   posts: {
-    perPage: 4,
-    perIndex: 4,
+    perPage: 5,
+    perIndex: 5,
     scheduledPostMargin: 15 * 60 * 1000,
   },
   features: {
@@ -35,11 +37,7 @@ export default defineAstroPaperConfig({
     },
   ],
   shareLinks: [
-    { name: "whatsapp", url: "https://wa.me/?text=" },
-    { name: "facebook", url: "https://www.facebook.com/sharer.php?u=" },
     { name: "x", url: "https://x.com/intent/post?url=" },
-    { name: "telegram", url: "https://t.me/share/url?url=" },
-    { name: "pinterest", url: "https://pinterest.com/pin/create/button/?url=" },
     { name: "mail", url: "mailto:?subject=See%20this%20post&body=" },
   ],
 });
