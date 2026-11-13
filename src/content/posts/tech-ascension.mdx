@@ -1,0 +1,44 @@
+---
+title: "tech-ascension - idle clicker browser game"
+description: "build your tech career one click at a time"
+pubDatetime: 2026-11-13T00:00:00-05:00
+---
+
+# Tech Ascension
+
+I have been on an idle, clicker, incremental game bender lately. Some of the games I've fully enjoyed over the last few months have been [*Bills Must be paid*](https://store.steampowered.com/app/4421010/Bills_Must_Be_Paid/), [*Road Trip*](https://onlinegames.net/idle/), [*Scritchy Scratchy*](https://funday-games.itch.io/scritchy-scratchy), [*Sir we have an orc problem*](https://store.steampowered.com/app/4594150/Sir_We_Have_an_Orc_Problem/) and a few others.
+
+These games aren't usually super long and can be finished in a day or so. I don't have as much time as I wish I did to dedicate to games anymore. Although I will be fully invested in GTA VI next weekend.
+
+I wanted to come up with a simple game that encapsulated the programmer world as far as career/skills progression. You start as a high school student and choose your path while completing Gigs, Jobs, buying gear and investing in Capital. It is focused on the arc from employee to CEO, although it could easily be ported to support multiple life branching choices.
+
+![The Climb screen in Tech Ascension, showing the WhyCombinator batch investment, the skill list, and the money counter](/tech-ascension-climb.png)
+
+## Agentic development
+
+I wanted to apply strong principles of agentic engineering to allow agents to develop, verify and play the game on their own while I would steer the direction and final outcome. I have both Claude and Cursor pro plans at $20/month but mostly used Claude for this game.
+
+### Models breakdown
+
+1. Opus 5.5 medium was the main planner and researcher. Sonnet 5.5 was the main implementer and Haiku did basic work, and it was my lifeline when request limits neared 90%.
+2. Grok Bot did research, nitpicked design decisions and contributed ideas alongside other bots for the game.
+
+### Process
+
+Since SpaceX came out with Grok Bot as part of the Cursor plan, I started playing with it and was immediately thrilled. I set up a few bots that collaborated on the game design, each with its own purpose. It was kinda creepy watching the bots message each other, but honestly it was a huge productivity gain.
+
+![The Grok Bot chat threads for the game project, with the latest message from each thread](/grokbot.png)
+
+I used `claude rc`, the remote control mode, for most of development while prompting from my phone with voice mode. Most of the time I set `--permission-mode auto` because it was a throwaway machine.
+
+One of my main rules was that Grok Bot should only ever open Issues in the repo and Claude should never auto merge.
+
+The best decision I made was giving the agents a way to play the game. They used a [test harness](https://github.com/RafaelBroseghini/tech-ascension/blob/main/docs/HARNESS.md) that reads the DOM and an [`agent-browser`](https://github.com/vercel-labs/agent-browser) CLI by Vercel. This gave me a lot more confidence in the accuracy and final outcome of specific tasks. Despite that I did have to fix the same mistake multiple times in multiple commits.
+
+![The commit history of the Tech Ascension repo, with many small commits per day](/tech-ascension-commits.png)
+
+During the process I tried many UI/UX skills from [Emil Kowalski](https://github.com/emilkowalski/skills) and development skills from [pstack](https://cursor.com/marketplace/cursor/pstack). I also created my own skill to find emojis on [emoji.gg](https://emoji.gg/). Emoji search could not rely only on the emoji name, so the skill had to look at the image. Name-only matching hands you back scary stuff lol.
+
+# Play
+
+Go to [tech-ascension](https://rafaelbroseghini.github.io/tech-ascension/) and give it a try. Have fun clicking!
